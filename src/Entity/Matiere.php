@@ -27,6 +27,16 @@ class Matiere
      */
     private $dureeTotale;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $intervenantAffecte;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateEnseignement;
+
     public function getIdMatiere(): ?int
     {
         return $this->idMatiere;
@@ -52,6 +62,30 @@ class Matiere
     public function setDureeTotale(int $dureeTotale): self
     {
         $this->dureeTotale = $dureeTotale;
+
+        return $this;
+    }
+
+    public function getIntervenantAffecte(): ?string
+    {
+        return $this->intervenantAffecte;
+    }
+
+    public function setIntervenantAffecte(string $intervenantAffecte): self
+    {
+        $this->intervenantAffecte = $intervenantAffecte;
+
+        return $this;
+    }
+
+    public function getDateEnseignement(): ?\DateTimeInterface
+    {
+        return $this->dateEnseignement;
+    }
+
+    public function setDateEnseignement(\DateTimeInterface $dateEnseignement): self
+    {
+        $this->dateEnseignement = $dateEnseignement;
 
         return $this;
     }

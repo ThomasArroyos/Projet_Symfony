@@ -20,21 +20,72 @@ class Groupe
     /**
      * @ORM\Column(type="text")
      */
-    private $libelle;
+    private $libelleGroupe;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $libelleClasse;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $specialite;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $nbEleveGroupe;
 
     public function getIdGroupe(): ?int
     {
         return $this->idGroupe;
     }
 
-    public function getLibelle(): ?string
+    public function getLibelleGroupe(): ?string
     {
-        return $this->libelle;
+        return $this->libelleGroupe;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLibelleGroupe(string $libelleGroupe): self
     {
-        $this->libelle = $libelle;
+        $this->libelleGroupe = $libelleGroupe;
+
+        return $this;
+    }
+
+    public function getLibelleClasse(): ?string
+    {
+        return $this->libelleClasse;
+    }
+
+    public function setLibelleClasse(string $libelleClasse): self
+    {
+        $this->libelleClasse = $libelleClasse;
+
+        return $this;
+    }
+
+    public function getSpecialite(): ?string
+    {
+        return $this->specialite;
+    }
+
+    public function setSpecialite(string $specialite): self
+    {
+        $this->specialite = $specialite;
+
+        return $this;
+    }
+
+    public function getNbEleveGroupe(): ?int
+    {
+        return $this->nbEleveGroupe;
+    }
+
+    public function setNbEleveGroupe(int $nbEleveGroupe): self
+    {
+        $this->nbEleveGroupe = $nbEleveGroupe;
 
         return $this;
     }

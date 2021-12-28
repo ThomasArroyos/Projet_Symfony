@@ -20,38 +20,38 @@ class Classe
     /**
      * @ORM\Column(type="text")
      */
-    private $libelle;
+    private $libelleClasse;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="integer")
      */
-    private $specialite;
+    private $nbEleveTotal;
 
     public function getIdClasse(): ?int
     {
         return $this->idClasse;
     }
 
-    public function getLibelle(): ?string
+    public function getLibelleClasse(): ?string
     {
-        return $this->libelle;
+        return $this->libelleClasse;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLibelleClasse(string $libelleClasse): self
     {
-        $this->libelle = $libelle;
+        $this->libelleClasse = $libelleClasse;
 
         return $this;
     }
 
-    public function getSpecialite(): ?string
+    public function getNbEleveTotal(): ?int
     {
-        return $this->specialite;
+        return $this->nbEleveTotal;
     }
 
-    public function setSpecialite(string $specialite): self
+    public function setNbEleveTotal(int $nbEleveTotal): self
     {
-        $this->specialite = $specialite;
+        $this->nbEleveTotal = $nbEleveTotal;
 
         return $this;
     }
