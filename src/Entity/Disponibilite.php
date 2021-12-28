@@ -11,14 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Disponibilite
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne (targetEntity="App\Entity\Intervenant", inversedBy="dispo_perso")
+     * @ORM\ManyToOne (targetEntity="App\Entity\Formation", inversedBy="periode_dispo")
+     * @ORM\JoinColumn (name="dispo_perso", referencedColumnName="periode")
+     * @ORM\JoinColumn (name="periode_dispo", referencedColumnName="periode")
      */
     private $periode;
 
@@ -27,10 +24,10 @@ class Disponibilite
      */
     private $conflitCours;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    /**
+     * @ORM\Column (type="integer"
+     * @OR\ManyToMany
+     */
 
     public function getPeriode(): ?int
     {

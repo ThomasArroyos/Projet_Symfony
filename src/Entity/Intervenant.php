@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\IntervenantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,6 +15,8 @@ class Intervenant
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @ORM\OneToMany(targetEntity=App\Entity\Matiere", mappedBy="intervenantAffecte")
+     * @ORM\JoinColumn(name="intervenantAffecte", referencedColumnName="idIntervenant")
      */
     private $idIntervenant;
 
@@ -34,6 +37,8 @@ class Intervenant
 
     /**
      * @ORM\Column(type="text")
+     * @ORM\OneToMany(targetEntity="App\Entity\Matiere", mappedBy="nomMatiere")
+     * @ORM\JoinColumn(name="nomMatiere", referencedColumnName="matieresEnseignees")
      */
     private $matieresEnseignees;
 
@@ -56,6 +61,12 @@ class Intervenant
      * @ORM\Column(type="text")
      */
     private $nomMatiere;
+
+    /**
+     * @ORM\Column (type="integer")
+     * @ORM\OneToMany (targetEntity="App\Entity\Disponibilite", mappedBy="periode")
+     */
+    private $dispo_perso;
 
     public function getIdIntervenant(): ?int
     {
@@ -98,16 +109,9 @@ class Intervenant
         return $this;
     }
 
-    public function getMatieresEnseignees(): ?string
+    public function getMatieresEnseignees()
     {
-        return $this->matieresEnseignees;
-    }
-
-    public function setMatieresEnseignees(string $matieresEnseignees): self
-    {
-        $this->matieresEnseignees = $matieresEnseignees;
-
-        return $this;
+        $this->matieresEnseignees = new ArrayCollection();
     }
 
     public function getDateIntervention(): ?\DateTimeInterface
@@ -156,5 +160,10 @@ class Intervenant
         $this->nomMatiere = $nomMatiere;
 
         return $this;
+    }
+
+    public function getDispoPerso()
+    {
+        $this->dispo_perso = new ArrayCollection();
     }
 }

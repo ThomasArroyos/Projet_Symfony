@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ClasseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,6 +20,10 @@ class Classe
 
     /**
      * @ORM\Column(type="text")
+     * @ORM\OneToOne(targetEntity="App\Entity\Groupe", mappedBy="")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Formation", inversedBy="classes")
+     * @ORM\JoinColumn (name="libelleClasse", referencedColumnName="libelleClasse")
+     * @ORM\JoinColumn (name="classes", referencedColumnName="libelleClasse")
      */
     private $libelleClasse;
 
@@ -26,6 +31,24 @@ class Classe
      * @ORM\Column(type="integer")
      */
     private $nbEleveTotal;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\OneToMany(targetEntity="App\Entity\Matiere", mappedBy="idMatiere")
+     */
+    private $matiere_id;
+
+    /**
+     * @ORM\Column(type="text")
+     * @ORM\OneToMany(targetEntity=App\Entity\Groupe", mappedBy="libelleGroupe")
+     */
+    private $groupe_libelle;
+
+    /**
+     * @ORM\Column(type="text")
+     * @ORM\ManyToOne(targetEntity=""
+     */
+    private $formationName;
 
     public function getIdClasse(): ?int
     {
@@ -54,5 +77,15 @@ class Classe
         $this->nbEleveTotal = $nbEleveTotal;
 
         return $this;
+    }
+
+    public function getMatiereId()
+    {
+        $this->matiere_id = new ArrayCollection();
+    }
+
+    public function getGroupeLibelle()
+    {
+        $this->groupe_libelle = new ArrayCollection();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MatiereRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,6 +20,10 @@ class Matiere
 
     /**
      * @ORM\Column(type="text")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Intervenant", inversedBy="matieresEnseignees")
+     * @ORM\ManyToOne (targetEntity="App\Entity\Formation", inversedBy="matieres")
+     * @ORM\JoinColumn(name="matieresEnseignees" referencedColumnName="nomMatiere")
+     * @ORM\JoinColumn (name="matieres", referencedColumnName="nomMatiere")
      */
     private $nomMatiere;
 
@@ -29,6 +34,7 @@ class Matiere
 
     /**
      * @ORM\Column(type="text")
+     * @ORM\ManyToOne(targetEntity=App\Entity\Intervenant", inversedBy="idIntervenant")
      */
     private $intervenantAffecte;
 
@@ -36,6 +42,13 @@ class Matiere
      * @ORM\Column(type="datetime")
      */
     private $dateEnseignement;
+
+    /**
+     * @ORM\Column(type="text")
+     * @ORM\OneToMany(targetEntity="App\Entity\Classe", mappedBy="libelleClasse")
+     * @ORM\JoinColumn(name="matiere_id", referencedColumnName="idMatiere")
+     */
+    private $classe_libelle;
 
     public function getIdMatiere(): ?int
     {
@@ -88,5 +101,10 @@ class Matiere
         $this->dateEnseignement = $dateEnseignement;
 
         return $this;
+    }
+
+    public function getClasseLibelle()
+    {
+        $this->classe_libelle = new ArrayCollection();
     }
 }

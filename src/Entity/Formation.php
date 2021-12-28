@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FormationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,8 +35,15 @@ class Formation
 
     /**
      * @ORM\Column(type="text")
+     * @ORM\OneToMany(targetEntity="App\Entity\Matiere", mappedBy="nomMatiere")
      */
     private $matieres;
+
+    /**
+     * @ORM\Column(type="text")
+     * @ORM\OneToMany(targetEntity="App\Entity\Classe", mappedBy="libelleClasse")
+     */
+    private $classes;
 
     /**
      * @ORM\Column(type="float")
@@ -51,6 +59,12 @@ class Formation
      * @ORM\Column(type="date")
      */
     private $periodesCours;
+
+    /**
+     * @ORM\Column (type="integer")
+     * @ORM\OneToMany (targetEntity="App\Entity\Disponibilite", mappedBy="periode")
+     */
+    private $periode_dispo;
 
     public function getId(): ?int
     {
@@ -93,16 +107,14 @@ class Formation
         return $this;
     }
 
-    public function getMatieres(): ?string
+    public function getMatieres()
     {
-        return $this->matieres;
+        $this->matieres = new ArrayCollection();
     }
 
-    public function setMatieres(string $matieres): self
+    public function getClasses()
     {
-        $this->matieres = $matieres;
-
-        return $this;
+        $this->classes = new ArrayCollection();
     }
 
     public function getDureeMatiere(): ?float
@@ -139,5 +151,10 @@ class Formation
         $this->periodesCours = $periodesCours;
 
         return $this;
+    }
+
+    public function getPeriodeDispo()
+    {
+        $this->periode_dispo = new ArrayCollection();
     }
 }

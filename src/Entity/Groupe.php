@@ -19,11 +19,14 @@ class Groupe
 
     /**
      * @ORM\Column(type="text")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Classe", inversedBy="libelleClasse")
+     * @ORM\JoinColumn(name="groupe_libelle", referencedColumnName="libelleGroupe")
      */
     private $libelleGroupe;
 
     /**
      * @ORM\Column(type="text")
+     * @ORM\OneToOne (targetEntity="App\Entity\Classe", inversedBy="libelleClasse")
      */
     private $libelleClasse;
 
