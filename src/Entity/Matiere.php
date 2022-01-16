@@ -12,13 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Matiere
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $idMatiere;
-
-    /**
      * @ORM\Column(type="text")
      * @ORM\ManyToOne(targetEntity="App\Entity\Intervenant", inversedBy="matieresEnseignees")
      * @ORM\ManyToOne (targetEntity="App\Entity\Formation", inversedBy="matieres")
@@ -39,21 +32,11 @@ class Matiere
     private $intervenantAffecte;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateEnseignement;
-
-    /**
      * @ORM\Column(type="text")
-     * @ORM\OneToMany(targetEntity="App\Entity\Classe", mappedBy="libelleClasse")
-     * @ORM\JoinColumn(name="matiere_id", referencedColumnName="idMatiere")
+     * @ORM\OneToMany(targetEntity="App\Entity\Classe", mappedBy="idClasse")
+     * @ORM\JoinColumn(name="classeId", referencedColumnName="idClasse")
      */
-    private $classe_libelle;
-
-    public function getIdMatiere(): ?int
-    {
-        return $this->idMatiere;
-    }
+    private $classeId;
 
     public function getNomMatiere(): ?string
     {
@@ -91,20 +74,8 @@ class Matiere
         return $this;
     }
 
-    public function getDateEnseignement(): ?\DateTimeInterface
+    public function getClasseId()
     {
-        return $this->dateEnseignement;
-    }
-
-    public function setDateEnseignement(\DateTimeInterface $dateEnseignement): self
-    {
-        $this->dateEnseignement = $dateEnseignement;
-
-        return $this;
-    }
-
-    public function getClasseLibelle()
-    {
-        $this->classe_libelle = new ArrayCollection();
+        $this->classeId = new ArrayCollection();
     }
 }

@@ -20,7 +20,7 @@ class Classe
 
     /**
      * @ORM\Column(type="text")
-     * @ORM\OneToOne(targetEntity="App\Entity\Groupe", mappedBy="")
+     * @ORM\OneToOne(targetEntity="App\Entity\Groupe", mappedBy="libelleClasse")
      * @ORM\ManyToOne(targetEntity="App\Entity\Formation", inversedBy="classes")
      * @ORM\JoinColumn (name="libelleClasse", referencedColumnName="libelleClasse")
      * @ORM\JoinColumn (name="classes", referencedColumnName="libelleClasse")
@@ -34,21 +34,9 @@ class Classe
 
     /**
      * @ORM\Column(type="integer")
-     * @ORM\OneToMany(targetEntity="App\Entity\Matiere", mappedBy="idMatiere")
+     * @ORM\OneToMany(targetEntity=App\Entity\Groupe", mappedBy="idGroupe")
      */
-    private $matiere_id;
-
-    /**
-     * @ORM\Column(type="text")
-     * @ORM\OneToMany(targetEntity=App\Entity\Groupe", mappedBy="libelleGroupe")
-     */
-    private $groupe_libelle;
-
-    /**
-     * @ORM\Column(type="text")
-     * @ORM\ManyToOne(targetEntity=""
-     */
-    private $formationName;
+    private $groupeId;
 
     public function getIdClasse(): ?int
     {
@@ -79,13 +67,8 @@ class Classe
         return $this;
     }
 
-    public function getMatiereId()
+    public function getGroupeId()
     {
-        $this->matiere_id = new ArrayCollection();
-    }
-
-    public function getGroupeLibelle()
-    {
-        $this->groupe_libelle = new ArrayCollection();
+        $this->groupeId = new ArrayCollection();
     }
 }

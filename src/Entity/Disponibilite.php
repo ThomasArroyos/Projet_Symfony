@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\DisponibiliteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass=DisponibiliteRepository::class)
@@ -12,22 +13,17 @@ class Disponibilite
 {
     /**
      * @ORM\Column(type="integer")
-     * @ORM\ManyToOne (targetEntity="App\Entity\Intervenant", inversedBy="dispo_perso")
-     * @ORM\ManyToOne (targetEntity="App\Entity\Formation", inversedBy="periode_dispo")
-     * @ORM\JoinColumn (name="dispo_perso", referencedColumnName="periode")
-     * @ORM\JoinColumn (name="periode_dispo", referencedColumnName="periode")
+     * @ORM\ManyToOne (targetEntity="App\Entity\Formation", inversedBy="periodes")
+     * @ORM\JoinColumn (name="periodes", referencedColumnName="periode")
      */
     private $periode;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="date")
+     * @ORM\ManyToOne (targetEntity="App\Entity\Intervenant", inversedBy="disponibilites")
+     * @ORM\JoinColumn(name="disponibilites", referencedColumnName="disponibilite")
      */
-    private $conflitCours;
-
-    /**
-     * @ORM\Column (type="integer"
-     * @OR\ManyToMany
-     */
+    private $disponibilite;
 
     public function getPeriode(): ?int
     {
@@ -41,14 +37,14 @@ class Disponibilite
         return $this;
     }
 
-    public function getConflitCours(): ?bool
+    public function getDisponibilite(): ?Date
     {
-        return $this->conflitCours;
+        return $this->disponibilite;
     }
 
-    public function setConflitCours(bool $conflitCours): self
+    public function setDisponibilite(Date $disponibilite): self
     {
-        $this->conflitCours = $conflitCours;
+        $this->disponibilite = $disponibilite;
 
         return $this;
     }

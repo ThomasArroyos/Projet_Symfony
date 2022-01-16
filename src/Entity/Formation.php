@@ -12,13 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Formation
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="text")
      */
     private $nomFormation;
@@ -48,28 +41,13 @@ class Formation
     /**
      * @ORM\Column(type="float")
      */
-    private $dureeMatiere;
+    private $dureeMatieres;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="integer")
+     * @ORM\OneToMany(targetEntity="App\Entity\Disponibilite", mappedBy="periode")
      */
-    private $periodesEntreprise;
-
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $periodesCours;
-
-    /**
-     * @ORM\Column (type="integer")
-     * @ORM\OneToMany (targetEntity="App\Entity\Disponibilite", mappedBy="periode")
-     */
-    private $periode_dispo;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    private $periodes;
 
     public function getNomFormation(): ?string
     {
@@ -117,44 +95,20 @@ class Formation
         $this->classes = new ArrayCollection();
     }
 
-    public function getDureeMatiere(): ?float
+    public function getDureeMatieres(): ?float
     {
-        return $this->dureeMatiere;
+        return $this->dureeMatieres;
     }
 
-    public function setDureeMatiere(float $dureeMatiere): self
+    public function setDureeMatiere(float $dureeMatieres): self
     {
-        $this->dureeMatiere = $dureeMatiere;
+        $this->dureeMatieres = $dureeMatieres;
 
         return $this;
     }
 
-    public function getPeriodesEntreprise(): ?\DateTimeInterface
+    public function getPeriodes()
     {
-        return $this->periodesEntreprise;
-    }
-
-    public function setPeriodesEntreprise(\DateTimeInterface $periodesEntreprise): self
-    {
-        $this->periodesEntreprise = $periodesEntreprise;
-
-        return $this;
-    }
-
-    public function getPeriodesCours(): ?\DateTimeInterface
-    {
-        return $this->periodesCours;
-    }
-
-    public function setPeriodesCours(\DateTimeInterface $periodesCours): self
-    {
-        $this->periodesCours = $periodesCours;
-
-        return $this;
-    }
-
-    public function getPeriodeDispo()
-    {
-        $this->periode_dispo = new ArrayCollection();
+        $this->periodes = new ArrayCollection();
     }
 }
