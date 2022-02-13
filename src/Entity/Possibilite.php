@@ -9,8 +9,15 @@ use Symfony\Component\Validator\Constraints\Date;
 /**
  * @ORM\Entity(repositoryClass=DisponibiliteRepository::class)
  */
-class Disponibilite
+class Possibilite
 {
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne (targetEntity="App\Entity\Formation", inversedBy="periodes")
@@ -19,11 +26,16 @@ class Disponibilite
     private $periode;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", name="disponibilite")
      * @ORM\ManyToOne (targetEntity="App\Entity\Intervenant", inversedBy="disponibilites")
      * @ORM\JoinColumn(name="disponibilites", referencedColumnName="disponibilite")
      */
     private $disponibilite;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     public function getPeriode(): ?int
     {

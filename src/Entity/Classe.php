@@ -34,7 +34,7 @@ class Classe
 
     /**
      * @ORM\Column(type="integer")
-     * @ORM\OneToMany(targetEntity=App\Entity\Groupe", mappedBy="idGroupe")
+     * @ORM\OneToMany(targetEntity="App\Entity\Groupe", mappedBy="idGroupe")
      */
     private $groupeId;
 

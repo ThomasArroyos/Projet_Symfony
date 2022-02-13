@@ -15,7 +15,7 @@ class Intervenant
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @ORM\OneToMany(targetEntity=App\Entity\Matiere", mappedBy="intervenantAffecte")
+     * @ORM\OneToMany(targetEntity="App\Entity\Matiere", mappedBy="intervenantAffecte")
      * @ORM\JoinColumn(name="intervenantAffecte", referencedColumnName="idIntervenant")
      */
     private $idIntervenant;
@@ -36,7 +36,7 @@ class Intervenant
     private $heuresTravaillees;
 
     /**
-     * @ORM\Column (type="Date")
+     * @ORM\Column (type="date")
      * @ORM\OneToMany (targetEntity="App\Entity\Disponibilite", mappedBy="disponibilite")
      */
     private $disponibilites;

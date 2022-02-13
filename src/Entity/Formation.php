@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass=FormationRepository::class)
@@ -12,17 +13,23 @@ use Doctrine\ORM\Mapping as ORM;
 class Formation
 {
     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+    /**
      * @ORM\Column(type="text")
      */
     private $nomFormation;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="date_debut_formation", type="datetime")
      */
     private $dateDebutFormation;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="date_fin_formation", type="datetime")
      */
     private $dateFinFormation;
 
@@ -49,6 +56,17 @@ class Formation
      */
     private $periodes;
 
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="id")
+     */
+    private $userId;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public function getNomFormation(): ?string
     {
         return $this->nomFormation;
@@ -61,24 +79,24 @@ class Formation
         return $this;
     }
 
-    public function getDateDebutFormation(): ?\DateTimeInterface
+    public function getDateDebutFormation(): ?Date
     {
         return $this->dateDebutFormation;
     }
 
-    public function setDateDebutFormation(\DateTimeInterface $dateDebutFormation): self
+    public function setDateDebutFormation(Date $dateDebutFormation): self
     {
         $this->dateDebutFormation = $dateDebutFormation;
 
         return $this;
     }
 
-    public function getDateFinFormation(): ?\DateTimeInterface
+    public function getDateFinFormation(): ?Date
     {
         return $this->dateFinFormation;
     }
 
-    public function setDateFinFormation(\DateTimeInterface $dateFinFormation): self
+    public function setDateFinFormation(Date $dateFinFormation): self
     {
         $this->dateFinFormation = $dateFinFormation;
 
@@ -110,5 +128,10 @@ class Formation
     public function getPeriodes()
     {
         $this->periodes = new ArrayCollection();
+    }
+
+    public function getUserId()
+    {
+        $this->userId = new ArrayCollection();
     }
 }

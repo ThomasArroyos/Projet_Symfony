@@ -12,10 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Matiere
 {
     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
      * @ORM\Column(type="text")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Intervenant", inversedBy="matieresEnseignees")
      * @ORM\ManyToOne (targetEntity="App\Entity\Formation", inversedBy="matieres")
-     * @ORM\JoinColumn(name="matieresEnseignees" referencedColumnName="nomMatiere")
      * @ORM\JoinColumn (name="matieres", referencedColumnName="nomMatiere")
      */
     private $nomMatiere;
@@ -26,8 +31,8 @@ class Matiere
     private $dureeTotale;
 
     /**
-     * @ORM\Column(type="text")
-     * @ORM\ManyToOne(targetEntity=App\Entity\Intervenant", inversedBy="idIntervenant")
+     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Intervenant", inversedBy="idIntervenant")
      */
     private $intervenantAffecte;
 
@@ -37,6 +42,11 @@ class Matiere
      * @ORM\JoinColumn(name="classeId", referencedColumnName="idClasse")
      */
     private $classeId;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     public function getNomMatiere(): ?string
     {
@@ -62,12 +72,12 @@ class Matiere
         return $this;
     }
 
-    public function getIntervenantAffecte(): ?string
+    public function getIntervenantAffecte(): ?int
     {
         return $this->intervenantAffecte;
     }
 
-    public function setIntervenantAffecte(string $intervenantAffecte): self
+    public function setIntervenantAffecte(int $intervenantAffecte): self
     {
         $this->intervenantAffecte = $intervenantAffecte;
 
