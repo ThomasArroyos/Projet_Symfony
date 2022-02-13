@@ -15,7 +15,7 @@ class Intervenant
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @ORM\OneToMany(targetEntity=App\Entity\Matiere", mappedBy="intervenantAffecte")
+     * @ORM\OneToMany(targetEntity="App\Entity\Matiere", mappedBy="intervenantAffecte")
      * @ORM\JoinColumn(name="intervenantAffecte", referencedColumnName="idIntervenant")
      */
     private $idIntervenant;
@@ -36,37 +36,10 @@ class Intervenant
     private $heuresTravaillees;
 
     /**
-     * @ORM\Column(type="text")
-     * @ORM\OneToMany(targetEntity="App\Entity\Matiere", mappedBy="nomMatiere")
-     * @ORM\JoinColumn(name="nomMatiere", referencedColumnName="matieresEnseignees")
+     * @ORM\Column (type="date")
+     * @ORM\OneToMany (targetEntity="App\Entity\Disponibilite", mappedBy="disponibilite")
      */
-    private $matieresEnseignees;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateIntervention;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $dureeSemaineInter;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $dureeInterTotale;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $nomMatiere;
-
-    /**
-     * @ORM\Column (type="integer")
-     * @ORM\OneToMany (targetEntity="App\Entity\Disponibilite", mappedBy="periode")
-     */
-    private $dispo_perso;
+    private $disponibilites;
 
     public function getIdIntervenant(): ?int
     {
@@ -109,61 +82,8 @@ class Intervenant
         return $this;
     }
 
-    public function getMatieresEnseignees()
+    public function getDisponibilites()
     {
-        $this->matieresEnseignees = new ArrayCollection();
-    }
-
-    public function getDateIntervention(): ?\DateTimeInterface
-    {
-        return $this->dateIntervention;
-    }
-
-    public function setDateIntervention(\DateTimeInterface $dateIntervention): self
-    {
-        $this->dateIntervention = $dateIntervention;
-
-        return $this;
-    }
-
-    public function getDureeSemaineInter(): ?float
-    {
-        return $this->dureeSemaineInter;
-    }
-
-    public function setDureeSemaineInter(float $dureeSemaineInter): self
-    {
-        $this->dureeSemaineInter = $dureeSemaineInter;
-
-        return $this;
-    }
-
-    public function getDureeInterTotale(): ?float
-    {
-        return $this->dureeInterTotale;
-    }
-
-    public function setDureeInterTotale(float $dureeInterTotale): self
-    {
-        $this->dureeInterTotale = $dureeInterTotale;
-
-        return $this;
-    }
-
-    public function getNomMatiere(): ?string
-    {
-        return $this->nomMatiere;
-    }
-
-    public function setNomMatiere(string $nomMatiere): self
-    {
-        $this->nomMatiere = $nomMatiere;
-
-        return $this;
-    }
-
-    public function getDispoPerso()
-    {
-        $this->dispo_perso = new ArrayCollection();
+        $this->disponibilites = new ArrayCollection();
     }
 }

@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Disponibilite;
+use App\Entity\Possibilite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Disponibilite|null find($id, $lockMode = null, $lockVersion = null)
- * @method Disponibilite|null findOneBy(array $criteria, array $orderBy = null)
- * @method Disponibilite[]    findAll()
- * @method Disponibilite[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Possibilite|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Possibilite|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Possibilite[]    findAll()
+ * @method Possibilite[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DisponibiliteRepository extends ServiceEntityRepository
+class PossibiliteRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Disponibilite::class);
+        parent::__construct($registry, Possibilite::class);
     }
 
     // /**
-    //  * @return Disponibilite[] Returns an array of Disponibilite objects
+    //  * @return Possibilite[] Returns an array of Possibilite objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class DisponibiliteRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Disponibilite
+    public function findOneBySomeField($value): ?Possibilite
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.exampleField = :val')

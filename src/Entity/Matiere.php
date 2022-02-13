@@ -16,13 +16,11 @@ class Matiere
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $idMatiere;
+    private $id;
 
     /**
      * @ORM\Column(type="text")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Intervenant", inversedBy="matieresEnseignees")
      * @ORM\ManyToOne (targetEntity="App\Entity\Formation", inversedBy="matieres")
-     * @ORM\JoinColumn(name="matieresEnseignees" referencedColumnName="nomMatiere")
      * @ORM\JoinColumn (name="matieres", referencedColumnName="nomMatiere")
      */
     private $nomMatiere;
@@ -33,26 +31,21 @@ class Matiere
     private $dureeTotale;
 
     /**
-     * @ORM\Column(type="text")
-     * @ORM\ManyToOne(targetEntity=App\Entity\Intervenant", inversedBy="idIntervenant")
+     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Intervenant", inversedBy="idIntervenant")
      */
     private $intervenantAffecte;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateEnseignement;
-
-    /**
      * @ORM\Column(type="text")
-     * @ORM\OneToMany(targetEntity="App\Entity\Classe", mappedBy="libelleClasse")
-     * @ORM\JoinColumn(name="matiere_id", referencedColumnName="idMatiere")
+     * @ORM\OneToMany(targetEntity="App\Entity\Classe", mappedBy="idClasse")
+     * @ORM\JoinColumn(name="classeId", referencedColumnName="idClasse")
      */
-    private $classe_libelle;
+    private $classeId;
 
-    public function getIdMatiere(): ?int
+    public function getId(): int
     {
-        return $this->idMatiere;
+        return $this->id;
     }
 
     public function getNomMatiere(): ?string
@@ -79,32 +72,20 @@ class Matiere
         return $this;
     }
 
-    public function getIntervenantAffecte(): ?string
+    public function getIntervenantAffecte(): ?int
     {
         return $this->intervenantAffecte;
     }
 
-    public function setIntervenantAffecte(string $intervenantAffecte): self
+    public function setIntervenantAffecte(int $intervenantAffecte): self
     {
         $this->intervenantAffecte = $intervenantAffecte;
 
         return $this;
     }
 
-    public function getDateEnseignement(): ?\DateTimeInterface
+    public function getClasseId()
     {
-        return $this->dateEnseignement;
-    }
-
-    public function setDateEnseignement(\DateTimeInterface $dateEnseignement): self
-    {
-        $this->dateEnseignement = $dateEnseignement;
-
-        return $this;
-    }
-
-    public function getClasseLibelle()
-    {
-        $this->classe_libelle = new ArrayCollection();
+        $this->classeId = new ArrayCollection();
     }
 }
