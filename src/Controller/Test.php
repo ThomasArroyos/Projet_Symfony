@@ -10,6 +10,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class Test extends AbstractController
 {
 function pageTest (){
-    return new Response("Page de test");
+    return new Response("Page de test !");
 }
 }
