@@ -56,12 +56,6 @@ class Formation
      */
     private $periodes;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="id")
-     */
-    private $userId;
-
     public function getId(): int
     {
         return $this->id;
@@ -128,10 +122,5 @@ class Formation
     public function getPeriodes()
     {
         $this->periodes = new ArrayCollection();
-    }
-
-    public function getUserId()
-    {
-        $this->userId = new ArrayCollection();
     }
 }
