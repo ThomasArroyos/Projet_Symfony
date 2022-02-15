@@ -105,7 +105,6 @@
       <path value="$PROJECT_DIR$/vendor/symfony/maker-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfony/web-profiler-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn" />
-      <path value="$PROJECT_DIR$/vendor/phpspec/prophecy" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php73" />
       <path value="$PROJECT_DIR$/vendor/symfony/filesystem" />
       <path value="$PROJECT_DIR$/vendor/symfony/error-handler" />
@@ -132,6 +131,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/translation-contracts" />
       <path value="$PROJECT_DIR$/vendor/symfony/dom-crawler" />
       <path value="$PROJECT_DIR$/vendor/symfony/validator" />
+      <path value="$PROJECT_DIR$/vendor/phpspec/prophecy" />
+      <path value="$PROJECT_DIR$/vendor/symfonycasts/verify-email-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />
