@@ -79,6 +79,32 @@
                 Fermer
             </button>
         </div>
+        <div class="modal">
+            <h1 id="titre">Ajouter événement</h1>
+            <br>
+                <label for="title">Choisir la matière:</label>
+                <select name="title" id="title" required>
+                    <option value="">--Choisir la matière--</option>
+                    <option value="maths">Mathématique</option>
+                </select>
+                <br>
+                <input type="text" id="descriptionForm" value="Monsieur gros chibre" required>
+                <br>
+                <label for="start">Veuillez choisir une date et une heure de début :</label>
+                <input id="start" type="datetime-local" name="start" required>
+                <br>
+                <label for="end">Veuillez choisir une date et une heure de fin :</label>
+                <input id="end" type="datetime-local" name="end" required>
+                <br>
+                <label for="allDay">Toute la journée :</label>
+                <input id="allDay" type="checkbox" name="allDay">
+                <br>
+                <input type="text" id="backgroundColor" value="#000000" required>
+                <input type="text" id="borderColor" value="#000000" required>
+                <input type="text" id="textColor" value="#FFFFFF" required>
+                <br>
+                <button id="ajouter">Ajouter l'événement</button>
+        </div>
     </div>
 {% endblock %}
 
@@ -87,6 +113,12 @@
         window.onload = function(){
 
             let lastEventClicked;
+            let lastStartTime;
+            let lastEndTime;
+            let lastAllDay;
+
+            let ajouter = document.querySelector("#ajouter")
+
             let modal_container = document.querySelector("#modal_container")
             let titre = document.querySelector("#titre")
             let description = document.querySelector("#description")
@@ -112,7 +144,34 @@
             })
 
             calendar.on('select', (e) => {
-                console.log(e)
+                lastStartTime = e.startStr
+                lastEndTime = e.endStr
+                lastAllDay = e.allDay
+                document.querySelector("#start").value = lastStartTime.slice(0,16);
+                document.querySelector("#end").value = lastEndTime.slice(0,16);
+                modal_container.classList.add('show');
+            })
+
+            ajouter.addEventListener('click', (e) => {
+                let url = `/api/add`
+
+                let donnees = {
+                    "title": document.querySelector("#title").value,
+                    "description": document.querySelector("#descriptionForm").value,
+                    "start": lastStartTime,
+                    "end": lastEndTime,
+                    "backgroundColor": document.querySelector("#backgroundColor").value,
+                    "borderColor": document.querySelector("#borderColor").value,
+                    "textColor": document.querySelector("#textColor").value,
+                    "allDay": lastAllDay
+                }
+                console.log(donnees)
+                let xhr = new XMLHttpRequest
+
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+
+                modal_container.classList.remove('show');
             })
 
             calendar.on('eventChange', (e) => {
@@ -143,7 +202,6 @@
             })
 
             supprimer.addEventListener('click', (e) => {
-                //console.log(lastEventClicked.event.id)
                 let url = `/api/${lastEventClicked.event.id}/delete`
                 let donnees = {
                     "title": lastEventClicked.event.title,
@@ -161,7 +219,7 @@
                 xhr.open("PUT", url)
                 xhr.send(JSON.stringify(donnees))
                 modal_container.classList.remove('show');
-                location.reload();
+                lastEventClicked.event.remove();
             })
 
             close.addEventListener('click', (e) => {
