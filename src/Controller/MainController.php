@@ -32,9 +32,6 @@ class MainController extends AbstractController
 
         $data = json_encode($rdvs);
 
-        /*return $this->render('main/index.html.twig', [
-            'controller_name' => 'MainController',
-        ], compact('data'));*/
         return $this->render('main/index.html.twig', compact('data'));
     }
 }

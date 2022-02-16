@@ -4,10 +4,60 @@
 
 {% block stylesheets %}
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+
+        *{
+            box-sizing: border-box;
+        }
+
         #calendrier{
             width: 80%;
             margin: auto;
         }
+
+        body{
+            background-color: #edeef6;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-container{
+            background-color: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            opacity: 0;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            z-index: 100000;
+        }
+
+        .modal-container.show{
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .modal{
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            padding: 30px 50px;
+            width: 600px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .modal h1{
+            margin: 0;
+        }
+
+        .modal p{
+            font-size: 14px;
+        }
+
     </style>
 {% endblock %}
 
@@ -15,11 +65,27 @@
  <div id="calendrier">
 
  </div>
+    <div class="modal-container" id="modal_container">
+        <div class="modal">
+            <h1>Ajouter un évenement</h1>
+            <p>
+                Test
+            </p>
+            <button id="close">
+                Fermer
+            </button>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
         window.onload = function(){
+
+            let open = document.querySelector("#open")
+            let modal_container = document.querySelector("#modal_container")
+            let close = document.querySelector("#close")
+
             let calendarElt = document.querySelector("#calendrier")
 
             let calendar = new FullCalendar.Calendar(calendarElt, {
@@ -58,6 +124,14 @@
 
                 xhr.open("PUT", url)
                 xhr.send(JSON.stringify(donnees))
+            })
+
+            calendar.on('eventClick', (e) => {
+                modal_container.classList.add('show');
+            })
+
+            close.addEventListener('click', (e) => {
+                modal_container.classList.remove('show');
             })
 
             calendar.render()
