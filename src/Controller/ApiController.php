@@ -73,4 +73,19 @@ class ApiController extends AbstractController
             return new Response('Données incomplètes', 404);
         }
     }
+
+    /**
+     * @Route ("/api/{id}/delete", name="api_event_delete", methods={"PUT"})
+     */
+    public function deleteEvent(?Calendar $calendar, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entry = $em->getRepository('App:Calendar')->find($calendar);
+        $em->remove($entry);
+        $em->flush();
+
+        $code = 204;
+
+        return new Response('Ok', $code);
+    }
 }

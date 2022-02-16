@@ -67,10 +67,14 @@
  </div>
     <div class="modal-container" id="modal_container">
         <div class="modal">
-            <h1>Ajouter un évenement</h1>
-            <p>
-                Test
-            </p>
+            <h1 id="titre"></h1>
+            <p id="description"></p>
+            <button id="modifier">
+                Modifier l'événement
+            </button>
+            <button id="supprimer">
+                Supprimer l'événement
+            </button>
             <button id="close">
                 Fermer
             </button>
@@ -82,8 +86,12 @@
     <script>
         window.onload = function(){
 
-            let open = document.querySelector("#open")
+            let lastEventClicked;
             let modal_container = document.querySelector("#modal_container")
+            let titre = document.querySelector("#titre")
+            let description = document.querySelector("#description")
+            let modifier = document.querySelector("#modifier")
+            let supprimer = document.querySelector("#supprimer")
             let close = document.querySelector("#close")
 
             let calendarElt = document.querySelector("#calendrier")
@@ -127,7 +135,33 @@
             })
 
             calendar.on('eventClick', (e) => {
+                lastEventClicked = e
+                console.log(lastEventClicked);
+                titre.innerHTML = e.event.title
+                description.innerHTML = e.event.extendedProps.description
                 modal_container.classList.add('show');
+            })
+
+            supprimer.addEventListener('click', (e) => {
+                //console.log(lastEventClicked.event.id)
+                let url = `/api/${lastEventClicked.event.id}/delete`
+                let donnees = {
+                    "title": lastEventClicked.event.title,
+                    "description": lastEventClicked.event.extendedProps.description,
+                    "start": lastEventClicked.event.start,
+                    "end": lastEventClicked.event.end,
+                    "backgroundColor": lastEventClicked.event.backgroundColor,
+                    "borderColor": lastEventClicked.event.borderColor,
+                    "textColor": lastEventClicked.event.textColor,
+                    "allDay": lastEventClicked.event.allDay
+                }
+                console.log(donnees)
+                let xhr = new XMLHttpRequest
+
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+                modal_container.classList.remove('show');
+                location.reload();
             })
 
             close.addEventListener('click', (e) => {
