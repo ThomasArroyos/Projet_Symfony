@@ -65,7 +65,7 @@
  <div id="calendrier">
 
  </div>
-    <div class="modal-container" id="modal_container">
+    <div class="modal-container" id="modal_container_event_selected">
         <div class="modal">
             <h1 id="titre"></h1>
             <p id="description"></p>
@@ -75,35 +75,75 @@
             <button id="supprimer">
                 Supprimer l'événement
             </button>
-            <button id="close">
+            <button id="closeEventSelect">
                 Fermer
             </button>
         </div>
+    </div>
+    <div class="modal-container" id="modal_container_grid_selected">
         <div class="modal">
             <h1 id="titre">Ajouter événement</h1>
             <br>
-                <label for="title">Choisir la matière:</label>
-                <select name="title" id="title" required>
-                    <option value="">--Choisir la matière--</option>
-                    <option value="maths">Mathématique</option>
-                </select>
-                <br>
-                <input type="text" id="descriptionForm" value="Monsieur gros chibre" required>
-                <br>
-                <label for="start">Veuillez choisir une date et une heure de début :</label>
-                <input id="start" type="datetime-local" name="start" required>
-                <br>
-                <label for="end">Veuillez choisir une date et une heure de fin :</label>
-                <input id="end" type="datetime-local" name="end" required>
-                <br>
-                <label for="allDay">Toute la journée :</label>
-                <input id="allDay" type="checkbox" name="allDay">
-                <br>
-                <input type="text" id="backgroundColor" value="#000000" required>
-                <input type="text" id="borderColor" value="#000000" required>
-                <input type="text" id="textColor" value="#FFFFFF" required>
-                <br>
-                <button id="ajouter">Ajouter l'événement</button>
+            <label for="title">Choisir la matière:</label>
+            <select name="title" id="title" required>
+                <option value="">--Choisir la matière--</option>
+                <option value="Comunication : COM">Comunication : COM</option>
+                <option value="GESTION">GESTION</option>
+                <option value="Droit info : DTINFO">Droit info : DTINFO</option>
+            </select>
+            <br>
+            <input type="text" id="descriptionForm" value="DESCARTES Mélanie" required>
+            <br>
+            <label for="start">Veuillez choisir une date et une heure de début :</label>
+            <input id="start" type="datetime-local" name="start" required>
+            <br>
+            <label for="end">Veuillez choisir une date et une heure de fin :</label>
+            <input id="end" type="datetime-local" name="end" required>
+            <br>
+            <label for="allDay">Toute la journée :</label>
+            <input id="allDay" type="checkbox" name="allDay">
+            <br>
+            <input type="text" id="backgroundColor" value="#000000" required>
+            <input type="text" id="borderColor" value="#000000" required>
+            <input type="text" id="textColor" value="#FFFFFF" required>
+            <br>
+            <button id="ajouter">Ajouter l'événement</button>
+            <button id="closeGridSelect">
+                Fermer
+            </button>
+        </div>
+    </div>
+    <div class="modal-container" id="modal_container_modification_form">
+        <div class="modal">
+            <h1 id="titre">Modifier événement</h1>
+            <br>
+            <label for="modificationFormTitle">Choisir la matière:</label>
+            <select name="modificationFormTitle" id="modificationFormTitle" required>
+                <option value="">--Choisir la matière--</option>
+                <option value="Comunication : COM">Comunication : COM</option>
+                <option value="GESTION">GESTION</option>
+                <option value="Droit info : DTINFO">Droit info : DTINFO</option>
+            </select>
+            <br>
+            <input type="text" id="modificationFormDescription" value="DESCARTES Mélanie" required>
+            <br>
+            <label for="modificationFormStart">Veuillez choisir une date et une heure de début :</label>
+            <input id="modificationFormStart" type="datetime-local" name="start" required>
+            <br>
+            <label for="modificationFormEnd">Veuillez choisir une date et une heure de fin :</label>
+            <input id="modificationFormEnd" type="datetime-local" name="end" required>
+            <br>
+            <label for="modificationFormAllDay">Toute la journée :</label>
+            <input id="modificationFormAllDay" type="checkbox" name="allDay">
+            <br>
+            <input type="text" id="modificationFormBackgroundColor" value="#000000" required>
+            <input type="text" id="modificationFormBorderColor" value="#000000" required>
+            <input type="text" id="modificationFormTextColor" value="#FFFFFF" required>
+            <br>
+            <button id="modifierEvent">Modifier l'événement</button>
+            <button id="closeModificationForm">
+                Fermer
+            </button>
         </div>
     </div>
 {% endblock %}
@@ -119,12 +159,22 @@
 
             let ajouter = document.querySelector("#ajouter")
 
-            let modal_container = document.querySelector("#modal_container")
+            let modal_container_event_selected = document.querySelector("#modal_container_event_selected")
+
+            let modal_container_grid_selected = document.querySelector("#modal_container_grid_selected")
+
+            let modal_container_modification_form = document.querySelector("#modal_container_modification_form")
+
             let titre = document.querySelector("#titre")
             let description = document.querySelector("#description")
+
             let modifier = document.querySelector("#modifier")
             let supprimer = document.querySelector("#supprimer")
-            let close = document.querySelector("#close")
+
+            let modifierEvent = document.querySelector("#modifierEvent")
+            let closeEventSelect = document.querySelector("#closeEventSelect")
+            let closeGridSelect = document.querySelector("#closeGridSelect")
+            let closeModificationForm = document.querySelector("#closeModificationForm")
 
             let calendarElt = document.querySelector("#calendrier")
 
@@ -147,9 +197,9 @@
                 lastStartTime = e.startStr
                 lastEndTime = e.endStr
                 lastAllDay = e.allDay
-                document.querySelector("#start").value = lastStartTime.slice(0,16);
-                document.querySelector("#end").value = lastEndTime.slice(0,16);
-                modal_container.classList.add('show');
+                document.querySelector("#start").value = lastStartTime.slice(0,16)
+                document.querySelector("#end").value = lastEndTime.slice(0,16)
+                modal_container_grid_selected.classList.add('show')
             })
 
             ajouter.addEventListener('click', (e) => {
@@ -171,7 +221,7 @@
                 xhr.open("PUT", url)
                 xhr.send(JSON.stringify(donnees))
 
-                modal_container.classList.remove('show');
+                modal_container_event_selected.classList.remove('show');
                 location.reload();
             })
 
@@ -196,10 +246,9 @@
 
             calendar.on('eventClick', (e) => {
                 lastEventClicked = e
-                console.log(lastEventClicked);
                 titre.innerHTML = e.event.title
                 description.innerHTML = e.event.extendedProps.description
-                modal_container.classList.add('show');
+                modal_container_event_selected.classList.add('show');
             })
 
             supprimer.addEventListener('click', (e) => {
@@ -219,12 +268,142 @@
 
                 xhr.open("PUT", url)
                 xhr.send(JSON.stringify(donnees))
-                modal_container.classList.remove('show');
+                modal_container_event_selected.classList.remove('show');
                 lastEventClicked.event.remove();
             })
 
-            close.addEventListener('click', (e) => {
-                modal_container.classList.remove('show');
+            modifier.addEventListener('click', (e) => {
+                // Enlever le modal de choix
+                modal_container_event_selected.classList.remove('show');
+
+                // Remplissage du formulaire de modification
+                document.querySelector("#modificationFormTitle").value = lastEventClicked.event.title
+                document.querySelector("#modificationFormDescription").value = lastEventClicked.event._def.extendedProps.description
+                document.querySelector("#modificationFormStart").value = formaterHeure(lastEventClicked)
+                document.querySelector("#modificationFormEnd").value = formaterHeure(lastEventClicked,false)
+                document.querySelector("#modificationFormBackgroundColor").value = lastEventClicked.event.backgroundColor
+                document.querySelector("#modificationFormBorderColor").value = lastEventClicked.event.borderColor
+                document.querySelector("#modificationFormTextColor").value = lastEventClicked.event.textColor
+                document.querySelector("#modificationFormAllDay").checked = lastEventClicked.event.allDay
+
+                // Afficher le modal de modification
+                modal_container_modification_form.classList.add('show');
+            })
+
+            /*
+             * Sert a formatter les heures
+             */
+            function formaterHeure(HTMLScriptElement, start=true) {
+                console.log(HTMLScriptElement.event.end.toString())
+                let datetime_locale_format
+                if (start===true && HTMLScriptElement.event.start !== null) {
+                    datetime_locale_format = HTMLScriptElement.event.start.toString().split(" ")[3]+"-"
+                    switch (HTMLScriptElement.event.start.toString().split(" ")[1]) {
+                        case "Jan": datetime_locale_format += "01-";
+                            break;
+                        case "Feb": datetime_locale_format += "02-";
+                            break;
+                        case "Mar": datetime_locale_format += "03-";
+                            break;
+                        case "Apr": datetime_locale_format += "04-";
+                            break;
+                        case "May": datetime_locale_format += "05-";
+                            break;
+                        case "Jun": datetime_locale_format += "06-";
+                            break;
+                        case "Jul": datetime_locale_format += "07-";
+                            break;
+                        case "Aug": datetime_locale_format += "08-";
+                            break;
+                        case "Sep": datetime_locale_format += "09-";
+                            break;
+                        case "Oct": datetime_locale_format += "10-";
+                            break;
+                        case "Nov": datetime_locale_format += "11-";
+                            break;
+                        case "Dec": datetime_locale_format += "12-";
+                            break;
+                    }
+                    if (parseInt(HTMLScriptElement.event.start.toString().split(" ")[4].split(":")[0],10)<11) {
+                        datetime_locale_format += HTMLScriptElement.event.start.toString().split(" ")[2]+"T0"+(parseInt(HTMLScriptElement.event.start.toString().split(" ")[4].split(":")[0],10)-1).toString()+":"+HTMLScriptElement.event.start.toString().split(" ")[4].split(":")[1]
+                    } else {
+                        datetime_locale_format += HTMLScriptElement.event.start.toString().split(" ")[2]+"T"+(parseInt(HTMLScriptElement.event.start.toString().split(" ")[4].split(":")[0],10)-1).toString()+":"+HTMLScriptElement.event.start.toString().split(" ")[4].split(":")[1]
+                    }
+                } else if (start===false && HTMLScriptElement.event.end !== null) {
+                    datetime_locale_format = HTMLScriptElement.event.end.toString().split(" ")[3]+"-"
+                    switch (HTMLScriptElement.event.end.toString().split(" ")[1]) {
+                        case "Jan": datetime_locale_format += "01-";
+                            break;
+                        case "Feb": datetime_locale_format += "02-";
+                            break;
+                        case "Mar": datetime_locale_format += "03-";
+                            break;
+                        case "Apr": datetime_locale_format += "04-";
+                            break;
+                        case "May": datetime_locale_format += "05-";
+                            break;
+                        case "Jun": datetime_locale_format += "06-";
+                            break;
+                        case "Jul": datetime_locale_format += "07-";
+                            break;
+                        case "Aug": datetime_locale_format += "08-";
+                            break;
+                        case "Sep": datetime_locale_format += "09-";
+                            break;
+                        case "Oct": datetime_locale_format += "10-";
+                            break;
+                        case "Nov": datetime_locale_format += "11-";
+                            break;
+                        case "Dec": datetime_locale_format += "12-";
+                            break;
+                    }
+                    if (parseInt(HTMLScriptElement.event.end.toString().split(" ")[4].split(":")[0],10)<11) {
+                        datetime_locale_format += HTMLScriptElement.event.end.toString().split(" ")[2]+"T0"+(parseInt(HTMLScriptElement.event.end.toString().split(" ")[4].split(":")[0],10)-1).toString()+":"+HTMLScriptElement.event.end.toString().split(" ")[4].split(":")[1]
+                    } else {
+                        datetime_locale_format += HTMLScriptElement.event.end.toString().split(" ")[2]+"T"+(parseInt(HTMLScriptElement.event.end.toString().split(" ")[4].split(":")[0],10)-1).toString()+":"+HTMLScriptElement.event.end.toString().split(" ")[4].split(":")[1]
+                    }
+                } else if (start===false && HTMLScriptElement.event.end === null) {
+                    datetime_locale_format = ""
+                }
+                return datetime_locale_format
+            }
+
+            /*
+             * Modification d'événement
+             */
+            modifierEvent.addEventListener('click', (e) => {
+                let url = `/api/${lastEventClicked.event.id}/edit`
+                let donnees = {
+                    "title": document.querySelector("#modificationFormTitle").value,
+                    "description": document.querySelector("#modificationFormDescription").value,
+                    "start": document.querySelector("#modificationFormStart").value,
+                    "end": document.querySelector("#modificationFormEnd").value,
+                    "backgroundColor": document.querySelector("#modificationFormBackgroundColor").value,
+                    "borderColor": document.querySelector("#modificationFormBorderColor").value,
+                    "textColor": document.querySelector("#modificationFormTextColor").value,
+                    "allDay": document.querySelector("#modificationFormAllDay").checked,
+                }
+                console.log(donnees);
+
+                let xhr = new XMLHttpRequest
+
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+
+                modal_container_modification_form.classList.remove('show');
+                location.reload();
+            })
+
+            closeEventSelect.addEventListener('click', (e) => {
+                modal_container_event_selected.classList.remove('show');
+            })
+
+            closeGridSelect.addEventListener('click', (e) => {
+                modal_container_grid_selected.classList.remove('show');
+            })
+
+            closeModificationForm.addEventListener('click', (e) => {
+                modal_container_modification_form.classList.remove('show');
             })
 
             calendar.render()

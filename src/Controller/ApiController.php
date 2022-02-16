@@ -25,6 +25,7 @@ class ApiController extends AbstractController
     {
         //Recupération des données
         $donnees = json_decode($request->getContent());
+
         if(
             isset($donnees->title) && !empty($donnees->title) &&
             isset($donnees->start) && !empty($donnees->start) &&
