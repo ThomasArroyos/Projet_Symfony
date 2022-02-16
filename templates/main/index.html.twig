@@ -172,6 +172,7 @@
                 xhr.send(JSON.stringify(donnees))
 
                 modal_container.classList.remove('show');
+                location.reload();
             })
 
             calendar.on('eventChange', (e) => {
@@ -213,7 +214,7 @@
                     "textColor": lastEventClicked.event.textColor,
                     "allDay": lastEventClicked.event.allDay
                 }
-                console.log(donnees)
+                console.log(lastEventClicked)
                 let xhr = new XMLHttpRequest
 
                 xhr.open("PUT", url)
