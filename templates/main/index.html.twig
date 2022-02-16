@@ -1,0 +1,232 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendrier{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
+
+        *{
+            box-sizing: border-box;
+        }
+
+        #calendrier{
+            width: 80%;
+            margin: auto;
+        }
+
+        body{
+            background-color: #edeef6;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-container{
+            background-color: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            opacity: 0;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            z-index: 100000;
+        }
+
+        .modal-container.show{
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .modal{
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            padding: 30px 50px;
+            width: 600px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .modal h1{
+            margin: 0;
+        }
+
+        .modal p{
+            font-size: 14px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+ <div id="calendrier">
+
+ </div>
+    <div class="modal-container" id="modal_container">
+        <div class="modal">
+            <h1 id="titre"></h1>
+            <p id="description"></p>
+            <button id="modifier">
+                Modifier l'événement
+            </button>
+            <button id="supprimer">
+                Supprimer l'événement
+            </button>
+            <button id="close">
+                Fermer
+            </button>
+        </div>
+        <div class="modal">
+            <h1 id="titre">Ajouter événement</h1>
+            <br>
+                <label for="title">Choisir la matière:</label>
+                <select name="title" id="title" required>
+                    <option value="">--Choisir la matière--</option>
+                    <option value="maths">Mathématique</option>
+                </select>
+                <br>
+                <input type="text" id="descriptionForm" value="Monsieur gros chibre" required>
+                <br>
+                <label for="start">Veuillez choisir une date et une heure de début :</label>
+                <input id="start" type="datetime-local" name="start" required>
+                <br>
+                <label for="end">Veuillez choisir une date et une heure de fin :</label>
+                <input id="end" type="datetime-local" name="end" required>
+                <br>
+                <label for="allDay">Toute la journée :</label>
+                <input id="allDay" type="checkbox" name="allDay">
+                <br>
+                <input type="text" id="backgroundColor" value="#000000" required>
+                <input type="text" id="borderColor" value="#000000" required>
+                <input type="text" id="textColor" value="#FFFFFF" required>
+                <br>
+                <button id="ajouter">Ajouter l'événement</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.onload = function(){
+
+            let lastEventClicked;
+            let lastStartTime;
+            let lastEndTime;
+            let lastAllDay;
+
+            let ajouter = document.querySelector("#ajouter")
+
+            let modal_container = document.querySelector("#modal_container")
+            let titre = document.querySelector("#titre")
+            let description = document.querySelector("#description")
+            let modifier = document.querySelector("#modifier")
+            let supprimer = document.querySelector("#supprimer")
+            let close = document.querySelector("#close")
+
+            let calendarElt = document.querySelector("#calendrier")
+
+            let calendar = new FullCalendar.Calendar(calendarElt, {
+                initialView: 'timeGridWeek',
+                locale: 'fr',
+                timeZone: 'Europe/Paris',
+                headerToolbar: {
+                    start: 'prev,next today',
+                    center: 'title',
+                    end: 'dayGridMonth,timeGridWeek'
+                },
+                events: {{ data|raw }},
+                editable: true,
+                eventResizableFromStart: true,
+                selectable: true
+            })
+
+            calendar.on('select', (e) => {
+                lastStartTime = e.startStr
+                lastEndTime = e.endStr
+                lastAllDay = e.allDay
+                document.querySelector("#start").value = lastStartTime.slice(0,16);
+                document.querySelector("#end").value = lastEndTime.slice(0,16);
+                modal_container.classList.add('show');
+            })
+
+            ajouter.addEventListener('click', (e) => {
+                let url = `/api/add`
+
+                let donnees = {
+                    "title": document.querySelector("#title").value,
+                    "description": document.querySelector("#descriptionForm").value,
+                    "start": lastStartTime,
+                    "end": lastEndTime,
+                    "backgroundColor": document.querySelector("#backgroundColor").value,
+                    "borderColor": document.querySelector("#borderColor").value,
+                    "textColor": document.querySelector("#textColor").value,
+                    "allDay": lastAllDay
+                }
+                console.log(donnees)
+                let xhr = new XMLHttpRequest
+
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+
+                modal_container.classList.remove('show');
+            })
+
+            calendar.on('eventChange', (e) => {
+                let url = `/api/${e.event.id}/edit`
+                let donnees = {
+                    "title": e.event.title,
+                    "description": e.event.extendedProps.description,
+                    "start": e.event.start,
+                    "end": e.event.end,
+                    "backgroundColor": e.event.backgroundColor,
+                    "borderColor": e.event.borderColor,
+                    "textColor": e.event.textColor,
+                    "allDay": e.event.allDay
+                }
+                console.log(donnees)
+                let xhr = new XMLHttpRequest
+
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+            })
+
+            calendar.on('eventClick', (e) => {
+                lastEventClicked = e
+                console.log(lastEventClicked);
+                titre.innerHTML = e.event.title
+                description.innerHTML = e.event.extendedProps.description
+                modal_container.classList.add('show');
+            })
+
+            supprimer.addEventListener('click', (e) => {
+                let url = `/api/${lastEventClicked.event.id}/delete`
+                let donnees = {
+                    "title": lastEventClicked.event.title,
+                    "description": lastEventClicked.event.extendedProps.description,
+                    "start": lastEventClicked.event.start,
+                    "end": lastEventClicked.event.end,
+                    "backgroundColor": lastEventClicked.event.backgroundColor,
+                    "borderColor": lastEventClicked.event.borderColor,
+                    "textColor": lastEventClicked.event.textColor,
+                    "allDay": lastEventClicked.event.allDay
+                }
+                console.log(donnees)
+                let xhr = new XMLHttpRequest
+
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+                modal_container.classList.remove('show');
+                lastEventClicked.event.remove();
+            })
+
+            close.addEventListener('click', (e) => {
+                modal_container.classList.remove('show');
+            })
+
+            calendar.render()
+        }
+    </script>
+{% endblock %}
