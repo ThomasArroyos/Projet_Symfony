@@ -25,7 +25,23 @@ class RegistrationController extends AbstractController
     {
         $this->emailVerifier = $emailVerifier;
     }*/
+    /**
+    * @Route ("/adduser", name="app_adduser", methods={"PUT"})
+    */
+    public function adduser(Request $request){
+        $donnees = json_decode($request->getContent());
+        $user = new User();
+        $user->setUsername($donnees->username);
+        $user->setPassword($donnees->password);
+        $user->setRole($donnees->role);
+        $user->setEmail($donnees->email);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
 
+        //Retourner code
+        return new Response('Ok', 200);
+    }
     /**
      * @Route ("/register", name="app_register")
      */
