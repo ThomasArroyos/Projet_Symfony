@@ -3,62 +3,7 @@
 {% block title %}Calendrier{% endblock %}
 
 {% block stylesheets %}
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
-
-        *{
-            box-sizing: border-box;
-        }
-
-        #calendrier{
-            width: 80%;
-            margin: auto;
-        }
-
-        body{
-            background-color: #edeef6;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .modal-container{
-            background-color: rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            opacity: 0;
-            pointer-events: none;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 100vw;
-            z-index: 100000;
-        }
-
-        .modal-container.show{
-            pointer-events: auto;
-            opacity: 1;
-        }
-
-        .modal{
-            background-color: #FFFFFF;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            padding: 30px 50px;
-            width: 600px;
-            max-width: 100%;
-            text-align: center;
-        }
-
-        .modal h1{
-            margin: 0;
-        }
-
-        .modal p{
-            font-size: 14px;
-        }
-
-    </style>
+    <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
 {% endblock %}
 
 {% block body %}
@@ -223,6 +168,8 @@
 
                 modal_container_event_selected.classList.remove('show');
                 location.reload();
+                //calendar.refetchEvents()
+
             })
 
             calendar.on('eventChange', (e) => {
