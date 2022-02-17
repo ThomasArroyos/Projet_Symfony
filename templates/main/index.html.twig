@@ -354,6 +354,27 @@
             })
 
             calendar.render()
+
+            let username = document.querySelector("#Nom")
+            let mail = document.querySelector("#mail")
+            let password = document.querySelector("#mdp")
+            let role = document.querySelector("#role")
+
+            let inscrire = document.querySelector("#inscrire")
+
+            inscrire.addEventListener('click', (e) => {
+                let donnees = {
+                    "username": username.value,
+                    "password": password.value,
+                    "role": password.value,
+                    "email": mail.value,
+                }
+                console.log(donnees);
+                let xhr = new XMLHttpRequest
+
+                xhr.open("PUT", url)
+                xhr.send(JSON.stringify(donnees))
+            })
         }
     </script>
 {% endblock %}
