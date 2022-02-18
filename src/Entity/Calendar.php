@@ -57,6 +57,11 @@ class Calendar
      */
     private $text_color;
 
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $email;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +159,18 @@ class Calendar
     public function setTextColor(string $text_color): self
     {
         $this->text_color = $text_color;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

@@ -1,50 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
+    <h1>Register</h1>
 
-    <h1>Inscription</h1>
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
+        {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
+        {{ form_row(registrationForm.agreeTerms) }}
 
-        <!-- <button type="submit" class="btn">Inscription</button> -->
-    {{ form_end(registrationForm) }} #}
-{% endblock %}
-{% block javascripts %}
-    <script>
-        window.onload = function(){
-            let username = document.querySelector("#Nom")
-            let mail = document.querySelector("#email")
-            let password = document.querySelector("#mdp")
-            let role = document.querySelector("#role")
-
-            let inscrire = document.querySelector("#inscrire")
-
-            inscrire.addEventListener('click', (e) => {
-                console.log(username);
-                console.log(mail);
-                console.log(password);
-                console.log(role);
-                let url = `/adduser`
-                let donnees = {
-                    "username": username.value,
-                    "password": password.value,
-                    "role": role.value,
-                    "email": mail.value,
-                }
-                console.log(donnees);
-                let xhr = new XMLHttpRequest
-
-                xhr.open("PUT", url)
-                xhr.send(JSON.stringify(donnees))
-            })
-        }
-    </script>
+        <button type="submit" class="btn">Register</button>
+    {{ form_end(registrationForm) }}
 {% endblock %}

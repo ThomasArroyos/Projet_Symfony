@@ -38,6 +38,7 @@
             </select>
             <br>
             <input type="text" id="descriptionForm" value="DESCARTES Mélanie" required>
+            <input type="text" id="emailForm" value="m.descartes@limayrac.fr" required>
             <br>
             <label for="start">Veuillez choisir une date et une heure de début :</label>
             <input id="start" type="datetime-local" name="start" required>
@@ -153,6 +154,7 @@
                 let donnees = {
                     "title": document.querySelector("#title").value,
                     "description": document.querySelector("#descriptionForm").value,
+                    "email": document.querySelector("#emailForm").value,
                     "start": lastStartTime,
                     "end": lastEndTime,
                     "backgroundColor": document.querySelector("#backgroundColor").value,

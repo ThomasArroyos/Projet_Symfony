@@ -50,6 +50,7 @@ class ApiController extends AbstractController
             //Hydratation de l'objet
             $calendar->setTitle($donnees->title);
             $calendar->setDescription($donnees->description);
+            $calendar->setEmail($donnees->email);
             $calendar->setStart(new \DateTime($donnees->start));
             if ($donnees->allDay){
                 $calendar->setEnd(new \DateTime($donnees->start));
