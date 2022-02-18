@@ -5,8 +5,9 @@
 {% block stylesheets %}
     <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/css.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet' />
 {% endblock %}
 
 {% block body %}
@@ -14,7 +15,7 @@
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="{{ asset('images/logo.png') }}" alt="">
+                    <img src="{{ asset('images/logo.png') }}" alt="" id="logo">
                 </span>
 
                 <div class="text logo-text">
@@ -167,9 +168,21 @@
 {% endblock %}
 
 {% block javascripts %}
-    <!--<script src="{{ asset('js/calendar.js') }}"></script>-->
+    <!--<script src="{#  {{ asset('js/calendar.js') }}#}"></script>-->
+    <script src="{{ asset('js/jquery.js') }}"></script>
     <script>
         window.onload = function(){
+
+            $( "#logo" ).click(function() {
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        //document.getElementById("txtHint").innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("GET", `/api/search/1`, true);
+                xhttp.send();
+            });
 
             let lastEventClicked;
             let lastStartTime;

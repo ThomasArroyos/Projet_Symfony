@@ -16,40 +16,31 @@ class MainController extends AbstractController
 
         $username = $_SESSION['_sf2_attributes']['_security.last_username'];
         $rolesUser = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
+        $emailUser = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEmail();
+
         $events = $calendar->findAll();
+
+        if (array_search('ROLE_SECRETAIRE', $rolesUser) != false) {
+            $events = $calendar->findAll();
+        } else {
+            $events = $calendar->findBy(['email' => $emailUser]);
+        }
 
         $rdvs = [];
 
         foreach($events as $event){
-            if (array_search('ROLE_SECRETAIRE', $rolesUser) != false) {
-                $rdvs[] = [
-                    'id' => $event->getId(),
-                    'start' => $event->getStart()->format('Y-m-d H:i:s'),
-                    'end' => $event->getEnd()->format('Y-m-d H:i:s'),
-                    'title' => $event->getTitle(),
-                    'email' => $event->getEmail(),
-                    'description' => $event->getDescription(),
-                    'backgroundColor' => $event->getBackgroundColor(),
-                    'borderColor' => $event->getBorderColor(),
-                    'textColor' => $event->getTextColor(),
-                    'allDay' => $event->getAllDay(),
-                ];
-            } else {
-                if ($event->getEmail() == $username) {
-                    $rdvs[] = [
-                        'id' => $event->getId(),
-                        'start' => $event->getStart()->format('Y-m-d H:i:s'),
-                        'end' => $event->getEnd()->format('Y-m-d H:i:s'),
-                        'title' => $event->getTitle(),
-                        'email' => $event->getEmail(),
-                        'description' => $event->getDescription(),
-                        'backgroundColor' => $event->getBackgroundColor(),
-                        'borderColor' => $event->getBorderColor(),
-                        'textColor' => $event->getTextColor(),
-                        'allDay' => $event->getAllDay(),
-                    ];
-                }
-            }
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                'end' => $event->getEnd()->format('Y-m-d H:i:s'),
+                'title' => $event->getTitle(),
+                'email' => $event->getEmail(),
+                'description' => $event->getDescription(),
+                'backgroundColor' => $event->getBackgroundColor(),
+                'borderColor' => $event->getBorderColor(),
+                'textColor' => $event->getTextColor(),
+                'allDay' => $event->getAllDay(),
+            ];
         }
 
         $data = json_encode($rdvs);
