@@ -1,15 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}CFPI | Connexion{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('css/form.css') }}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 {% endblock %}
 
 {% block body %}
     <form method="post">
-        {% if error %}
+        {# {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
@@ -17,7 +18,7 @@
             <div class="mb-3">
                 You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
             </div>
-        {% endif %}
+        {% endif %} #}
 
         <div class="container">
             <div class="forms">
@@ -28,7 +29,7 @@
                         <i class="uil uil-envelope icon"></i>
                     </div>
                     <div class="input-field">
-                        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder="Votre mot de passe" required>
+                        <input type="password" name="password" id="inputPassword" class="form-control password" autocomplete="current-password" placeholder="Votre mot de passe" required>
                         <i class="uil uil-lock icon"></i>
                         <i class="uil uil-eye-slash showHidePw"></i>
                     </div>
@@ -73,4 +74,35 @@
             Sign in
         </button>-->
     </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+    const container = document.querySelector(".container"),
+    pwShowHide = document.querySelectorAll(".showHidePw"),
+    pwFields = document.querySelectorAll(".password"),
+    forgot_password_link = document.querySelector(".forgot-password-link"),
+    retour = document.querySelector(".retour-link");
+
+    //   js code to show/hide password and change icon
+    pwShowHide.forEach(eyeIcon =>{
+    eyeIcon.addEventListener("click", ()=>{
+    pwFields.forEach(pwField =>{
+    if(pwField.type ==="password"){
+    pwField.type = "text";
+
+    pwShowHide.forEach(icon =>{
+    icon.classList.replace("uil-eye-slash", "uil-eye");
+    })
+    }else{
+    pwField.type = "password";
+
+    pwShowHide.forEach(icon =>{
+    icon.classList.replace("uil-eye", "uil-eye-slash");
+    })
+    }
+    })
+    })
+    })
+    </script>
 {% endblock %}

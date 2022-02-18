@@ -1,100 +1,173 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Calendrier{% endblock %}
+{% block title %}CFPI | Calendrier{% endblock %}
 
 {% block stylesheets %}
-    <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/css.css') }}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'
 {% endblock %}
 
 {% block body %}
- <div id="calendrier">
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="{{ asset('images/logo.png') }}" alt="">
+                </span>
 
- </div>
-    <div class="modal-container" id="modal_container_event_selected">
-        <div class="modal">
-            <h1 id="titre"></h1>
-            <p id="description"></p>
-            <button id="modifier">
-                Modifier l'événement
-            </button>
-            <button id="supprimer">
-                Supprimer l'événement
-            </button>
-            <button id="closeEventSelect">
-                Fermer
-            </button>
+                <div class="text logo-text">
+                    <span class="name">CFPI</span>
+                    <span class="profession">Planning</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link" id="planning">
+                        <a href="planning.html">
+                            <i class='bx bx-calendar icon' ></i>
+                            <span class="text nav-text">Planning</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="utilisateurs.html">
+                            <i class='bx bx-user icon' ></i>
+                            <span class="text nav-text">Utilisateurs</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="" id="deconnexion">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Se déconnecter</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark mode</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+
+            </div>
         </div>
-    </div>
-    <div class="modal-container" id="modal_container_grid_selected">
-        <div class="modal">
-            <h1 id="titre">Ajouter événement</h1>
-            <br>
-            <label for="title">Choisir la matière:</label>
-            <select name="title" id="title" required>
-                <option value="">--Choisir la matière--</option>
-                <option value="Comunication : COM">Comunication : COM</option>
-                <option value="GESTION">GESTION</option>
-                <option value="Droit info : DTINFO">Droit info : DTINFO</option>
-            </select>
-            <br>
-            <input type="text" id="descriptionForm" value="DESCARTES Mélanie" required>
-            <input type="text" id="emailForm" value="m.descartes@limayrac.fr" required>
-            <br>
-            <label for="start">Veuillez choisir une date et une heure de début :</label>
-            <input id="start" type="datetime-local" name="start" required>
-            <br>
-            <label for="end">Veuillez choisir une date et une heure de fin :</label>
-            <input id="end" type="datetime-local" name="end" required>
-            <br>
-            <label for="allDay">Toute la journée :</label>
-            <input id="allDay" type="checkbox" name="allDay">
-            <br>
-            <input type="text" id="backgroundColor" value="#000000" required>
-            <input type="text" id="borderColor" value="#000000" required>
-            <input type="text" id="textColor" value="#FFFFFF" required>
-            <br>
-            <button id="ajouter">Ajouter l'événement</button>
-            <button id="closeGridSelect">
-                Fermer
-            </button>
+
+    </nav>
+
+    <section class="home">
+        <div id="calendrier">
+
         </div>
-    </div>
-    <div class="modal-container" id="modal_container_modification_form">
-        <div class="modal">
-            <h1 id="titre">Modifier événement</h1>
-            <br>
-            <label for="modificationFormTitle">Choisir la matière:</label>
-            <select name="modificationFormTitle" id="modificationFormTitle" required>
-                <option value="">--Choisir la matière--</option>
-                <option value="Comunication : COM">Comunication : COM</option>
-                <option value="GESTION">GESTION</option>
-                <option value="Droit info : DTINFO">Droit info : DTINFO</option>
-            </select>
-            <br>
-            <input type="text" id="modificationFormDescription" value="DESCARTES Mélanie" required>
-            <br>
-            <label for="modificationFormStart">Veuillez choisir une date et une heure de début :</label>
-            <input id="modificationFormStart" type="datetime-local" name="start" required>
-            <br>
-            <label for="modificationFormEnd">Veuillez choisir une date et une heure de fin :</label>
-            <input id="modificationFormEnd" type="datetime-local" name="end" required>
-            <br>
-            <label for="modificationFormAllDay">Toute la journée :</label>
-            <input id="modificationFormAllDay" type="checkbox" name="allDay">
-            <br>
-            <input type="text" id="modificationFormBackgroundColor" value="#000000" required>
-            <input type="text" id="modificationFormBorderColor" value="#000000" required>
-            <input type="text" id="modificationFormTextColor" value="#FFFFFF" required>
-            <br>
-            <button id="modifierEvent">Modifier l'événement</button>
-            <button id="closeModificationForm">
-                Fermer
-            </button>
+        <div class="modal-container" id="modal_container_event_selected">
+            <div class="modal">
+                <h1 id="titre"></h1>
+                <p id="description"></p>
+                <button id="modifier">
+                    Modifier l'événement
+                </button>
+                <button id="supprimer">
+                    Supprimer l'événement
+                </button>
+                <button id="closeEventSelect">
+                    Fermer
+                </button>
+            </div>
         </div>
-    </div>
+        <div class="modal-container" id="modal_container_grid_selected">
+            <div class="modal">
+                <h1 id="titre">Ajouter événement</h1>
+                <br>
+                <label for="title">Choisir la matière:</label>
+                <select name="title" id="title" required>
+                    <option value="">--Choisir la matière--</option>
+                    <option value="Comunication : COM">Comunication : COM</option>
+                    <option value="GESTION">GESTION</option>
+                    <option value="Droit info : DTINFO">Droit info : DTINFO</option>
+                </select>
+                <br>
+                <input type="text" id="descriptionForm" value="DESCARTES Mélanie" required>
+                <input type="text" id="emailForm" value="m.descartes@limayrac.fr" required>
+                <br>
+                <label for="start">Veuillez choisir une date et une heure de début :</label>
+                <input id="start" type="datetime-local" name="start" required>
+                <br>
+                <label for="end">Veuillez choisir une date et une heure de fin :</label>
+                <input id="end" type="datetime-local" name="end" required>
+                <br>
+                <label for="allDay">Toute la journée :</label>
+                <input id="allDay" type="checkbox" name="allDay">
+                <br>
+                <input type="text" id="backgroundColor" value="#000000" required>
+                <input type="text" id="borderColor" value="#000000" required>
+                <input type="text" id="textColor" value="#FFFFFF" required>
+                <br>
+                <button id="ajouter">Ajouter l'événement</button>
+                <button id="closeGridSelect">
+                    Fermer
+                </button>
+            </div>
+        </div>
+        <div class="modal-container" id="modal_container_modification_form">
+            <div class="modal">
+                <h1 id="titre">Modifier événement</h1>
+                <br>
+                <label for="modificationFormTitle">Choisir la matière:</label>
+                <select name="modificationFormTitle" id="modificationFormTitle" required>
+                    <option value="">--Choisir la matière--</option>
+                    <option value="Comunication : COM">Comunication : COM</option>
+                    <option value="GESTION">GESTION</option>
+                    <option value="Droit info : DTINFO">Droit info : DTINFO</option>
+                </select>
+                <br>
+                <input type="text" id="modificationFormDescription" value="DESCARTES Mélanie" required>
+                <br>
+                <label for="modificationFormStart">Veuillez choisir une date et une heure de début :</label>
+                <input id="modificationFormStart" type="datetime-local" name="start" required>
+                <br>
+                <label for="modificationFormEnd">Veuillez choisir une date et une heure de fin :</label>
+                <input id="modificationFormEnd" type="datetime-local" name="end" required>
+                <br>
+                <label for="modificationFormAllDay">Toute la journée :</label>
+                <input id="modificationFormAllDay" type="checkbox" name="allDay">
+                <br>
+                <input type="text" id="modificationFormBackgroundColor" value="#000000" required>
+                <input type="text" id="modificationFormBorderColor" value="#000000" required>
+                <input type="text" id="modificationFormTextColor" value="#FFFFFF" required>
+                <br>
+                <button id="modifierEvent">Modifier l'événement</button>
+                <button id="closeModificationForm">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block javascripts %}
+    <!--<script src="{{ asset('js/calendar.js') }}"></script>-->
     <script>
         window.onload = function(){
 
