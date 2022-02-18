@@ -8,42 +8,13 @@
     {% endfor %}
 
     <h1>Inscription</h1>
-
-    <form method="post" action="traitement.php">
-        <p>
-            <label for="Nom">Nom utilisateur : </label>
-            <input type="text" name="Nom" id="Nom" />
-
-            <br />
-            <br />
-            <label for="mdp">Mot de passe :</label>
-            <input type="text" name="mdp" id="mdp" value="mdp"/>
-
-            <br />
-            <br />
-            <label for="email">Email :</label>
-            <input type="email" name="email" id="email"/>
-
-            <br />
-            <br />
-            <label for="roles">Rôle à attribuer</label><br />
-            <select name="role" id="role">
-                <option value="eleve">Eleve</option>
-                <option value="formateur">Formateur</option>
-            </select>
-
-            <br />
-            <br />
-            <input type="button" value="Inscrire" id="inscrire"/>
-        </p>
-    </form>
-    {#     {{ form_start(registrationForm) }}
+    {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.username) }}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
 
-        <button type="submit" class="btn">Inscription</button>
+        <!-- <button type="submit" class="btn">Inscription</button> -->
     {{ form_end(registrationForm) }} #}
 {% endblock %}
 {% block javascripts %}
