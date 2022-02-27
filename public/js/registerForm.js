@@ -1,5 +1,5 @@
 let form = document.querySelector("#form")
-      let divDeBas = document.querySelector("#matieres")
+let divDeBas = document.querySelector("#matieres")
       let plus = document.querySelectorAll(".plus")[0]
       let minus = document.querySelectorAll(".minus")
       let enregistrer = document.querySelector("#enregistrer")
@@ -44,17 +44,17 @@ let form = document.querySelector("#form")
       })
 
       enregistrer.addEventListener("click", ( )=>{
-        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        var formatPrenomNom = ([A-Z])+([a-z]*)+(((-)+([A-Z])+([a-z]*))?);
+        //var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        //var formatPrenomNom = /([A-Z])+([a-z]*)+(((-)+([A-Z])+([a-z]*))?)/s;
         let email = document.querySelector("#email")
 
-        if (email.value.match(mailformat) != null) {
+        /*if (email.value.match(mailformat) != null) {
           console.log("Oui")
         } else {
           email.parentNode.classList.add("vide")
           email.placeholder = "exemple@limayrac.fr"
           email.focus()
-        }
+        }*/
         let url = `/api/user/add`
 
         let toutesLesMatieres = "";
