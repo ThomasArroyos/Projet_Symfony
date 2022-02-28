@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -35,9 +37,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\ManyToMany(targetEntity=Matiere::class, mappedBy="intervenantAffecte")
      */
     private $matieres;
+
+    public function __construct()
+    {
+        $this->matieres = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -117,14 +125,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getMatieres(): ?string
+    /**
+     * @return Collection<int, Matiere>
+     */
+    public function getMatieres(): Collection
     {
         return $this->matieres;
     }
 
-    public function setMatieres(?string $matieres): self
+    public function addMatiere(Matiere $matiere): self
     {
-        $this->matieres = $matieres;
+        if (!$this->matieres->contains($matiere)) {
+            $this->matieres[] = $matiere;
+            $matiere->addIntervenantAffecte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatiere(Matiere $matiere): self
+    {
+        if ($this->matieres->removeElement($matiere)) {
+            $matiere->removeIntervenantAffecte($this);
+        }
 
         return $this;
     }
