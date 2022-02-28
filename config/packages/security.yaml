@@ -44,5 +44,7 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
     role_hierarchy:
+        ROLE_ETUDIANT: ROLE_USER
+        ROLE_INTERVENANT: ROLE_USER
         ROLE_SECRETAIRE: ROLE_USER
         ROLE_ADMIN: ROLE_SECRETAIRE

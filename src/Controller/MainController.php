@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CalendarRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -46,5 +47,29 @@ class MainController extends AbstractController
         $data = json_encode($rdvs);
 
         return $this->render('main/index.html.twig', compact('data'));
+    }
+
+    /**
+     * @Route ("/users", name="users")
+     */
+    public function indexUser(UserRepository $user): Response
+    {
+        $utilisateurs = $user->findAll();
+
+        $tabUtilisateurs = [];
+
+        foreach($utilisateurs as $utilisateur){
+            $tabUtilisateurs[] = [
+                'id' => $utilisateur->getId(),
+                'email' => $utilisateur->getEmail(),
+                'roles' => $utilisateur->getRoles(),
+                'password' => $utilisateur->getPassword(),
+                'matieres' => $utilisateur->getMatieres(),
+            ];
+        }
+
+        $data = json_encode($tabUtilisateurs);
+
+        return $this->render('main/users.html.twig', compact('data'));
     }
 }

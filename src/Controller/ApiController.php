@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Calendar;
 use App\Entity\User;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
@@ -205,5 +208,101 @@ class ApiController extends AbstractController
         //return $this->render($userJSON);
         //return (json_encode($userJSON));
 
+    }
+
+    /**
+     * @Route ("/api/users/add", name="api_user_add", methods={"PUT"})
+     */
+    public function addUser(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager)
+    {
+        $donnees = json_decode($request->getContent());
+
+        if(
+            isset($donnees->email) && !empty($donnees->email) &&
+            isset($donnees->roles) && !empty($donnees->roles) &&
+            isset($donnees->password) && !empty($donnees->password) &&
+            isset($donnees->matieres) && !empty($donnees->matieres)
+        ){
+            $user = new User();
+
+            //Hydratation de l'objet
+            //$user->setId($donnees->id);
+            $user->setEmail($donnees->email);
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $donnees->password
+                ));
+            $user->setMatieres($donnees->matieres);
+            $user->setRoles(explode(",",$donnees->roles));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            //Retourner code
+            return new Response('Ok', 206);
+
+        } else {
+            //Données incomplètes
+            return new Response('Données incomplètes', 404);
+        }
+    }
+
+    /**
+     * @Route ("/api/users/edit/{id}", name="api_user_edit", methods={"PUT"})
+     */
+    public function editUser(?User $user, Request $request)
+    {
+        $donnees = json_decode($request->getContent());
+
+        if(
+            isset($donnees->id) && !empty($donnees->id) &&
+            isset($donnees->email) && !empty($donnees->email) &&
+            isset($donnees->roles) && !empty($donnees->roles) &&
+            isset($donnees->password) && !empty($donnees->password) &&
+            isset($donnees->matieres) && !empty($donnees->matieres)
+        ){
+            //$user->setId($donnees->id);
+            $user->setEmail($donnees->email);
+            $user->setPassword($donnees->password);
+            /*$user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $donnees->password->get('plainPassword')->getData()
+                ));*/
+            $user->setMatieres($donnees->matieres);
+            $user->setRoles(explode(",",$donnees->roles));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            //Retourner code
+            return new Response('Ok', "SUBARU IMPREZA");
+
+        } else {
+            //Données incomplètes
+            return new Response('Données incomplètes', 404);
+        }
+    }
+
+    /**
+     * @Route ("/api/users/delete/{id}", name="api_user_delete", methods={"PUT"})
+     */
+    public function deleteUser(?UserRepository $user, Request $request)
+    {
+        $donnees = json_decode($request->getContent());
+
+        $em = $this->getDoctrine()->getManager();
+        $entrys = $em->getRepository('App:User')->findBy(['id' => $donnees->id]);
+        foreach ($entrys as $entry) {
+            $em->remove($entry);
+            $em->flush();
+        }
+
+        $code = 204;
+
+        return new Response('Ok', $code);
     }
 }

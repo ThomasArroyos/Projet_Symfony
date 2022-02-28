@@ -1,0 +1,95 @@
+:root {
+    /* ===== Colors ===== */
+    --primary-color: #695CFE;
+}
+
+body.dark {
+    --primary-dark-color: #ccc;
+}
+
+.sidebar #utilisateurs a {
+    border: 2px solid var(--primary-color);
+    transition: none;
+}
+
+.sidebar #utilisateurs a .icon,
+.sidebar #utilisateurs a .text {
+    color: var(--primary-color);
+    transition: none;
+}
+
+.sidebar #utilisateurs a:hover {
+    background-color: transparent;
+}
+
+.sidebar #utilisateurs a:hover .icon,
+.sidebar #utilisateurs a:hover .text {
+    color: var(--primary-color);
+}
+
+body.dark .sidebar #utilisateurs a {
+    border: 2px solid var(--primary-dark-color);
+}
+
+body.dark .sidebar #utilisateurs .icon,
+body.dark .sidebar #utilisateurs .text {
+    color: var(--primary-dark-color);
+}
+
+.container_table {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+table {
+    width: 800px;
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+}
+
+th {
+    text-align: left;
+    background-color: var(--primary-color);
+}
+
+tbody tr:hover {
+    background-color: rgba(105, 92, 254, 0.3);
+}
+
+tbody td {
+    position: relative;
+    color: var(--primary-color);
+}
+
+tbody td:hover:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -9999px;
+    bottom: -9999px;
+    background-color: rgba(105, 92, 254, 0.3);
+    z-index: -1;
+}
+
+body.dark tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark tbody td:hover:before {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+section {
+    align-content: center;
+}
