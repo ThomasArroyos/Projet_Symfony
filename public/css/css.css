@@ -284,7 +284,7 @@ body.dark .switch::before{
 }
 
 .home{
-    position: absolute;
+    position: relative;
     top: 0;
     top: 0;
     left: 250px;
@@ -302,9 +302,32 @@ body.dark .switch::before{
 
 .sidebar.close ~ .home{
     left: 78px;
-    height: 100vh;
+    height: 100%;
     width: calc(100% - 78px);
 }
 body.dark .home .text{
     color: var(--text-color);
+}
+
+body.dark td{
+    color: var(--text-color);
+}
+
+body.dark .fc-toolbar-title{
+    color: var(--text-color);
+}
+
+body.dark .fc-col-header-cell-cushion{
+    color: var(--text-color);
+}
+
+body::-webkit-scrollbar {
+    width: 20px;
+}
+
+body::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    border: 5px solid transparent;
+    background-clip: content-box;
+    background-color: var(--primary-color);
 }

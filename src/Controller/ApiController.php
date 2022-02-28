@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Calendar;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 class ApiController extends AbstractController
 {
@@ -144,5 +146,64 @@ class ApiController extends AbstractController
         $code = 204;
 
         return new Response('Ok', $code);
+    }
+
+    /**
+     * @Route ("/api/search/{id}", name="api_event_search", methods={"GET"})
+     */
+    public function searchEvent(?Calendar $calendar, Request $request)
+    {
+        $id = $request->attributes->get('id');
+
+        $calendarRepository = $this->getDoctrine()->getManager()
+            ->getRepository(Calendar::class);
+        $events = $calendarRepository->findBy(['id'=>$id]);
+
+        $rdvs = [];
+
+        foreach($events as $event){
+                $rdvs[] = [
+                    'id' => $event->getId(),
+                    'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                    'end' => $event->getEnd()->format('Y-m-d H:i:s'),
+                    'title' => $event->getTitle(),
+                    'email' => $event->getEmail(),
+                    'description' => $event->getDescription(),
+                    'backgroundColor' => $event->getBackgroundColor(),
+                    'borderColor' => $event->getBorderColor(),
+                    'textColor' => $event->getTextColor(),
+                    'allDay' => $event->getAllDay(),
+                ];
+        }
+
+        dd(json_encode($rdvs));
+    }
+
+
+
+    /**
+     * @Route ("/api/users", name="api_user_search", methods={"GET"})
+     */
+    public function searchUsers(Request $request)
+    {
+        $userRepository = $this->getDoctrine()->getManager()
+            ->getRepository(User::class);
+        $users = $userRepository->findAll();
+
+        $userJSON = [];
+
+        foreach($users as $user){
+            $userJSON[] = [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
+            ];
+        }
+
+        //dd($userJSON);
+        return new Response(json_encode($userJSON));
+        //return $this->render($userJSON);
+        //return (json_encode($userJSON));
+
     }
 }

@@ -1,11 +1,118 @@
-{% extends 'base.html.twig' %}
+{% block title %}CFPI | Utilisateurs{% endblock %}
 
-{% block title %}Register{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/css.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/registerForm.css') }}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="{{ asset('images/logo.png') }}" alt="" id="logo">
+                </span>
 
-    {{ form_start(registrationForm) }}
+                <div class="text logo-text">
+                    <span class="name">CFPI</span>
+                    <span class="profession">Planning</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link" id="planning">
+                        <a href="planning.html">
+                            <i class='bx bx-calendar icon' ></i>
+                            <span class="text nav-text">Planning</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="utilisateurs.html">
+                            <i class='bx bx-user icon' ></i>
+                            <span class="text nav-text">Utilisateurs</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="" id="deconnexion">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Se déconnecter</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark mode</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+        <div class="container">
+            <div class="forms">
+                <div class="form login">
+                    <span class="title">Nouvelle utilisateur</span>
+                    <form action="#" id="form">
+                        <div class="input-field">
+                            <input type="text" placeholder="Email" required id="email">
+                            <i class="uil uil-envelope icon"></i>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" placeholder="Prénom NOM" required id="prenomNom">
+                            <i class="uil uil-user"></i>
+                        </div>
+                        <div class="input-field">
+                            <select name="roles" id="roles">
+                                <option value="" class="placeholder">Rôle</option>
+                                <option value="ROLE_ADMIN">Admin</option>
+                                <option value="ROLE_USER">Utilisateur</option>
+                            </select>
+                            <i class="uil uil-shield"></i>
+                        </div>
+                        <div class="input-field" id="matieres">
+                            <input type="text" placeholder="Matières" required id="matiereValue" class="matieresV">
+                            <i class="uil uil-graduation-cap"></i>
+                            <i class="uil uil-plus-circle plus"></i>
+                        </div>
+                        <div class="input-field button">
+                            <input type="button" value="Enregistrer" id="enregistrer">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {# {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
@@ -13,5 +120,62 @@
         {{ form_row(registrationForm.agreeTerms) }}
 
         <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        {{ form_end(registrationForm) }} #}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('js/registerForm.js') }}"></script>
+    <script>
+        const body = document.querySelector('body'),
+            sidebar = body.querySelector('nav'),
+            toggle = body.querySelector(".toggle"),
+            searchBtn = body.querySelector(".search-box"),
+            modeSwitch = body.querySelector(".toggle-switch"),
+            modeText = body.querySelector(".mode-text");
+
+        $( "#logo" ).click(function() {
+
+            let test;
+            const users = fetch(`/api/users`).then(res => res.json()).then(value => {
+                return value;
+            })
+
+            users.then((a) => {
+                test = a;
+            });
+
+            console.log(test)
+
+
+            //console.log(fetch(`/api/users`).then(res => res.json()))
+
+            //console.log(test.resolve(fetch(`/api/users`).then(res => res.json())))
+        });
+
+        let planning = document.querySelector('#planning')
+
+        console.log(planning)
+
+
+        toggle.addEventListener("click" , () =>{
+            sidebar.classList.toggle("close");
+        })
+
+        searchBtn.addEventListener("click" , () =>{
+            sidebar.classList.remove("close");
+        })
+
+        modeSwitch.addEventListener("click" , () =>{
+            body.classList.toggle("dark");
+
+            if(body.classList.contains("dark")){
+                modeText.innerText = "Light mode";
+            }else{
+                modeText.innerText = "Dark mode";
+
+            }
+        });
+    </script>
 {% endblock %}
