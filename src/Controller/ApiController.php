@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Calendar;
+use App\Entity\Matiere;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -304,5 +305,38 @@ class ApiController extends AbstractController
         $code = 204;
 
         return new Response('Ok', $code);
+    }
+
+    /**
+     * @Route ("/api/matieres/add", name="api_matrieres_add", methods={"PUT"})
+     */
+    public function addMatiere(Request $request, EntityManagerInterface $entityManager)
+    {
+        $donnees = json_decode($request->getContent());
+
+        if(
+            isset($donnees->nomMatiere) && !empty($donnees->nomMatiere) &&
+            isset($donnees->dureeTotale) && !empty($donnees->dureeTotale)
+        ){
+            $matiere = new Matiere();
+
+            $matiere->setNomMatiere($donnees->nomMatiere);
+            $matiere->setDureeTotale($donnees->dureeTotale);
+
+            if ($donnees->intervenantAffecte != "Personne") {
+
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($matiere);
+            $em->flush();
+
+            //Retourner code
+            return new Response('Ok', 206);
+
+        } else {
+            //Données incomplètes
+            return new Response('Données incomplètes', 404);
+        }
     }
 }

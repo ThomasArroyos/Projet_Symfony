@@ -1,0 +1,323 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CFPI | Matieres{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/css.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/registerForm.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/cssUtilisateurs.css') }}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+{% endblock %}
+
+{% block body %}
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="{{ asset('images/logo.png') }}" alt="" id="logo">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name">CFPI</span>
+                    <span class="profession">Planning</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link" id="planning">
+                        <a href="planning.html">
+                            <i class='bx bx-calendar icon' ></i>
+                            <span class="text nav-text">Planning</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="{{ path('app_logout') }}">
+                            <i class='bx bx-user icon' ></i>
+                            <span class="text nav-text">Utilisateurs</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="{{ path('app_logout') }}" id="deconnexion">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Se déconnecter</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark mode</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+        <div class="container_table">
+            <table id="table"></table>
+        </div>
+        <div class="modal-container" id="modal_container_matiere_add">
+            <div class="container">
+                <div class="forms">
+                    <div class="form login">
+                        <span class="title">Ajouter une matiere</span>
+                        <form action="#" id="form">
+                            <div class="input-field">
+                                <input type="text" placeholder="Nom de la matière" required id="matiere">
+                                <i class="uil uil-envelope icon"></i>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" placeholder="Durée en heure" required id="duree">
+                                <i class="uil uil-envelope icon"></i>
+                            </div>
+                            <div class="input-field" id="enseignant_select">
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Ajouter" id="ajouter">
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Annuler" id="bouttonAnulerCreation">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-container" id="modal_container_users_selected">
+            <div class="container">
+                <div class="forms">
+                    <div class="form login">
+                        <span class="title">Editer utilisateur</span>
+                        <form action="#" id="form">
+                                <input type="hidden" required id="id">
+                            <div class="input-field">
+                                <input type="text" placeholder="Email" required id="email">
+                                <i class="uil uil-envelope icon"></i>
+                            </div>
+                                <input type="hidden" required id="password">
+                            <div class="input-field">
+                                <select name="roles" id="roles">
+                                    <option value="" class="placeholder">Rôle</option>
+                                    <option value="ROLE_SECRETAIRE,ROLE_USER">Secretaire</option>
+                                    <option value="ROLE_INTERVENANT,ROLE_USER">Intervenant</option>
+                                    <option value="ROLE_ETUDIANT,ROLE_USER">Etudiant</option>
+                                </select>
+                                <i class="uil uil-shield"></i>
+                            </div>
+                            <div class="input-field" id="matieres">
+                                <input type="text" placeholder="Matières" required id="matiereValue" class="matieresV">
+                                <i class="uil uil-graduation-cap"></i>
+                                <i class="uil uil-plus-circle plus"></i>
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Enregistrer" id="enregistrer">
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Annuler" id="bouttonAnulerEdition">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-container" id="modal_container_users_suppression">
+            <div class="modal">
+                <h1 id="titre">Attention !</h1>
+                <br>
+                <h2 id="utilisateursASupprimer">Voulez-vous vraiment supprimer l'utilisateur : </h2>
+                <button id="bouttonSupprimer">Supprimer</button>
+                <button id="bouttonAnulerSuppression">
+                    Annuler
+                </button>
+            </div>
+        </div>
+        <input type="button" value="Ajouter utilisateur" id="bouttonAjouter">
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <!--<script src="{#  {{ asset('js/calendar.js') }}#}"></script>-->
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('js/darkMode.js') }}"></script>
+    <script src="{{ asset('js/modalAjoutMatiere.js') }}"></script>
+    <script>
+        window.onload = function(){
+
+            var myParent = document.querySelector("#enseignant_select");
+
+//Create array of options to be added
+            var array = [];
+            var datasUser = {{ dataUser|raw }};
+            array.push("Personne")
+
+            for (var i=0; i < datasUser.length; i++) {
+                array.push(datasUser[i].email)
+            }
+
+//Create and append select list
+            var selectList = document.createElement("select");
+            selectList.id = "mySelect";
+            myParent.appendChild(selectList);
+
+//Create and append the options
+            for (var i = 0; i < array.length; i++) {
+                var option = document.createElement("option");
+                option.value = array[i];
+                option.text = array[i];
+                selectList.appendChild(option);
+            }
+
+            var list = {{ dataMatiere|raw }};
+            let modalContainerUsersEdition = document.querySelector("#modal_container_users_selected")
+            let modalContainerUsersSuppression = document.querySelector("#modal_container_users_suppression")
+            let utilisateursASupprimer = document.querySelector("#utilisateursASupprimer")
+            let bouttonSupprimer = document.querySelector("#bouttonSupprimer")
+            let bouttonAnulerSuppression = document.querySelector("#bouttonAnulerSuppression")
+            let lastUserClicked = {};
+            let id = document.querySelector("#id")
+            let matiere = document.querySelector("#matiere")
+            let duree = document.querySelector("#duree")
+            let password = document.querySelector("#password")
+            let matieres = document.querySelector("#matieres")
+
+
+            function GFG_FUN() {
+                var cols = [];
+
+                for (var i = 0; i < list.length; i++) {
+                    for (var k in list[i]) {
+                        if (cols.indexOf(k) === -1) {
+
+                            // Push all keys to the array
+                            cols.push(k);
+                        }
+                    }
+                }
+
+                // Create a table element
+                var table = document.createElement("table");
+
+                // Create table row tr element of a table
+                var tr = table.insertRow(-1);
+
+                for (var i = 0; i < cols.length+2; i++) {
+
+                    // Create the table header th element
+                    var theader = document.createElement("th");
+                    if (i==4){
+                        theader.innerHTML = "Modifié"
+                    } else if (i==5) {
+                        theader.innerHTML = "Supprimer"
+                    }
+                    else {
+                        theader.innerHTML = cols[i];
+                    }
+
+                    // Append columnName to the table row
+                    tr.appendChild(theader);
+                }
+
+                // Adding the data to the table
+                for (var i = 0; i < list.length; i++) {
+
+                    // Create a new row
+                    trow = table.insertRow(-1);
+                    for (var j = 0; j < cols.length+2; j++) {
+                        var cell = trow.insertCell(-1);
+
+                        // Inserting the cell at particular place
+                        if (j==4) {
+                            var image = document.createElement("i");
+                            image.classList.add('bx');
+                            image.classList.add('bx-edit-alt');
+                            image.addEventListener("click", (e) => {
+                                modalContainerUsersEdition.classList.add('show')
+                                id.value = e.path[0].parentNode.parentNode.children[0].innerHTML
+                                email.value = e.path[0].parentNode.parentNode.children[1].innerHTML
+                                roles.value = e.path[0].parentNode.parentNode.children[2].innerHTML
+                                password.value = e.path[0].parentNode.parentNode.children[3].innerHTML
+                                matieres.value = e.path[0].parentNode.parentNode.children[4].innerHTML
+                            })
+                            cell.appendChild(image);
+                        } else if (j==5) {
+                            var image = document.createElement("i");
+                            image.classList.add('bx');
+                            image.classList.add('bx-x');
+                            image.addEventListener("click", (e) => {
+                                lastUserClicked.id = e.path[0].parentNode.parentNode.children[0].innerHTML
+                                lastUserClicked.email = e.path[0].parentNode.parentNode.children[1].innerHTML
+                                lastUserClicked.roles = e.path[0].parentNode.parentNode.children[2].innerHTML
+                                lastUserClicked.password = e.path[0].parentNode.parentNode.children[3].innerHTML
+                                lastUserClicked.matieres = e.path[0].parentNode.parentNode.children[4].innerHTML
+
+                                modalContainerUsersSuppression.classList.add('show')
+                                utilisateursASupprimer.innerHTML = "Voulez-vous vraiment supprimer l'utilisateur : "+e.path[0].parentNode.parentNode.children[1].innerHTML
+                                console.log(lastUserClicked)
+                            })
+                            cell.appendChild(image);
+                        } else {
+                            cell.innerHTML = list[i][cols[j]];
+                        }
+                    }
+                }
+
+                bouttonAnulerSuppression.addEventListener("click", (e) => {
+                    modalContainerUsersSuppression.classList.remove('show')
+                })
+
+                bouttonSupprimer.addEventListener("click", (e) => {
+                    let url = `/api/users/delete/${lastUserClicked.id}`
+                    let donnees = {
+                        "id": lastUserClicked.id,
+                        "email": lastUserClicked.email,
+                        "roles": lastUserClicked.roles,
+                        "password": lastUserClicked.password,
+                        "matieres": lastUserClicked.matieres
+                    }
+                    console.log(lastUserClicked)
+                    let xhr = new XMLHttpRequest
+
+                    xhr.open("PUT", url)
+                    xhr.send(JSON.stringify(donnees))
+                    modalContainerUsersSuppression.classList.remove('show');
+                })
+
+                // Add the newly created table containing json data
+                var el = document.getElementById("table");
+                el.innerHTML = "";
+                el.appendChild(table);
+            }
+
+            GFG_FUN();
+
+        }
+    </script>
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CalendarRepository;
+use App\Repository\MatiereRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,5 +72,49 @@ class MainController extends AbstractController
         $data = json_encode($tabUtilisateurs);
 
         return $this->render('main/users.html.twig', compact('data'));
+    }
+
+    /**
+     * @Route ("/matieres", name="matieres")
+     */
+    public function indexMatiere(MatiereRepository $mat,UserRepository $user): Response
+    {
+        $matieres = $mat->findAll();
+
+        $tabMatieres = [];
+
+        foreach($matieres as $matiere){
+            if ($matiere->getIntervenantAffecte()->toArray() == []) {
+                $tabMatieres[] = [
+                    'id' => $matiere->getId(),
+                    'nomMatiere' => $matiere->getNomMatiere(),
+                    'dureeTotale' => $matiere->getDureeTotale(),
+                    'intervenantAffecte' => "Personne"
+                ];
+            } else {
+                $tabMatieres[] = [
+                    'id' => $matiere->getId(),
+                    'nomMatiere' => $matiere->getNomMatiere(),
+                    'dureeTotale' => $matiere->getDureeTotale(),
+                    'intervenantAffecte' => $matiere->getIntervenantAffecte()->toArray()[0]->getEmail()
+                ];
+            }
+        }
+
+        $dataMatiere = json_encode($tabMatieres);
+
+        $utilisateurs = $user->findAll();
+
+        $tabUtilisateurs = [];
+
+        foreach($utilisateurs as $utilisateur){
+            $tabUtilisateurs[] = [
+                'email' => $utilisateur->getEmail()
+            ];
+        }
+
+        $dataUser = json_encode($tabUtilisateurs);
+
+        return $this->render('main/matieres.html.twig', compact(['dataMatiere','dataUser']));
     }
 }
