@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CalendarRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,34 +35,26 @@ class Calendar
     private $end;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $description;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $all_day;
 
     /**
-     * @ORM\Column(type="string", length=7)
+     * @ORM\Column(type="string", length=100)
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="email")
      */
-    private $background_color;
-
-    /**
-     * @ORM\Column(type="string", length=7)
-     */
-    private $border_color;
-
-    /**
-     * @ORM\Column(type="string", length=7)
-     */
-    private $text_color;
+    private $email;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @ORM\OneToMany(targetEntity=Matiere::class, mappedBy="nomMatiere")
      */
-    private $email;
+    private $nomMatiere;
+
+    public function __construct()
+    {
+        $this->nomMatiere = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -103,18 +97,6 @@ class Calendar
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getAllDay(): ?bool
     {
         return $this->all_day;
@@ -127,42 +109,6 @@ class Calendar
         return $this;
     }
 
-    public function getBackgroundColor(): ?string
-    {
-        return $this->background_color;
-    }
-
-    public function setBackgroundColor(string $background_color): self
-    {
-        $this->background_color = $background_color;
-
-        return $this;
-    }
-
-    public function getBorderColor(): ?string
-    {
-        return $this->border_color;
-    }
-
-    public function setBorderColor(string $border_color): self
-    {
-        $this->border_color = $border_color;
-
-        return $this;
-    }
-
-    public function getTextColor(): ?string
-    {
-        return $this->text_color;
-    }
-
-    public function setTextColor(string $text_color): self
-    {
-        $this->text_color = $text_color;
-
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -171,6 +117,36 @@ class Calendar
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Matiere>
+     */
+    public function getNomMatiere(): Collection
+    {
+        return $this->nomMatiere;
+    }
+
+    public function addNomMatiere(Matiere $nomMatiere): self
+    {
+        if (!$this->nomMatiere->contains($nomMatiere)) {
+            $this->nomMatiere[] = $nomMatiere;
+            $nomMatiere->setCalendar($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNomMatiere(Matiere $nomMatiere): self
+    {
+        if ($this->nomMatiere->removeElement($nomMatiere)) {
+            // set the owning side to null (unless already changed)
+            if ($nomMatiere->getCalendar() === $this) {
+                $nomMatiere->setCalendar(null);
+            }
+        }
 
         return $this;
     }

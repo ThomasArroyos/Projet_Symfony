@@ -171,6 +171,8 @@
     <!--<script src="{#  {{ asset('js/calendar.js') }}#}"></script>-->
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/darkMode.js') }}"></script>
+    <script src="{{ asset('js/monthGridYear.js') }}"></script>
+    <!--script src="{#{{ asset('js/experimentalYearView.js') }}#}"></script-->
     <script>
         window.onload = function(){
 
@@ -218,13 +220,18 @@
                 headerToolbar: {
                     start: 'prev,next today',
                     center: 'title',
-                    end: 'dayGridMonth,timeGridWeek'
+                    end: 'dayGridMonth,timeGridWeek,monthGridYear'
+                },
+                view: {
+                  monthGridYear: MonthGridYear
                 },
                 events: {{ data|raw }},
                 editable: true,
                 eventResizableFromStart: true,
                 selectable: true
-            })
+            });
+            calendar.render();
+            calendar.render();
 
             calendar.on('select', (e) => {
                 lastStartTime = e.startStr

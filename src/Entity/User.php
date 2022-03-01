@@ -3,17 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -22,14 +19,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
+
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\ManyToOne(targetEntity=Calendar::class, inversedBy="email")
      */
     private $email;
+
     /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
@@ -37,29 +38,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Matiere::class, mappedBy="intervenantAffecte")
+     * @ORM\Column(type="string", length=100)
+     * @ORM\ManyToMany(targetEntity=Matiere::class, inversedBy="nomMatiere")
      */
     private $matieres;
-
-    public function __construct()
-    {
-        $this->matieres = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
+
     public function getEmail(): ?string
     {
         return $this->email;
     }
+
     public function setEmail(string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
+
     /**
      * A visual identifier that represents this user.
      *
@@ -69,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
+
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
      */
@@ -76,6 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
+
     /**
      * @see UserInterface
      */
@@ -87,12 +89,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return array_unique($roles);
     }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
         return $this;
     }
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -100,12 +104,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->password;
     }
+
     public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
+
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
@@ -116,6 +122,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return null;
     }
+
     /**
      * @see UserInterface
      */
@@ -126,28 +133,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Matiere>
+     * @return Collection<string, Matiere>
      */
     public function getMatieres(): Collection
     {
         return $this->matieres;
     }
 
-    public function addMatiere(Matiere $matiere): self
+    public function addMatieres(Matiere $matieres): self
     {
-        if (!$this->matieres->contains($matiere)) {
-            $this->matieres[] = $matiere;
-            $matiere->addIntervenantAffecte($this);
+        if (!$this->matieres->contains($matieres)) {
+            $this->matieres[] = $matieres;
         }
 
         return $this;
     }
 
-    public function removeMatiere(Matiere $matiere): self
+    public function removeMatieres(Matiere $matieres): self
     {
-        if ($this->matieres->removeElement($matiere)) {
-            $matiere->removeIntervenantAffecte($this);
-        }
+        $this->matieres->removeElement($matieres);
 
         return $this;
     }
