@@ -20,11 +20,6 @@ class Couleur
     /**
      * @ORM\Column(type="string", length=7)
      */
-    private $color;
-
-    /**
-     * @ORM\Column(type="string", length=7)
-     */
     private $backgroundColor;
 
     /**
@@ -32,21 +27,20 @@ class Couleur
      */
     private $borderColor;
 
-    public function getId(): ?int
+    /**
+     * @ORM\Column(type="string", length=7)
+     */
+    private $color;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Matiere::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="couleurName")
+     */
+    private $couleurName;
+
+    public function getId(): ?Matiere
     {
         return $this->id;
-    }
-
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
-
-    public function setColor(string $color): self
-    {
-        $this->color = $color;
-
-        return $this;
     }
 
     public function getBackgroundColor(): ?string
@@ -69,6 +63,28 @@ class Couleur
     public function setBorderColor(string $borderColor): self
     {
         $this->borderColor = $borderColor;
+
+        return $this;
+    }
+
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    public function setColor($color): void
+    {
+        $this->color = $color;
+    }
+
+    public function getCouleurName(): ?Matiere
+    {
+        return $this->couleurName;
+    }
+
+    public function setCouleurName(?Matiere $couleurName): self
+    {
+        $this->couleurName = $couleurName;
 
         return $this;
     }
