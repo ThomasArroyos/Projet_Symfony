@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CFPI | Connexion{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/connexion.css') }}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+{% endblock %}
+
+{% block body %}
+    <form method="post">
+        <div class="container">
+            <div class="forms">
+                <div class="form login">
+                    <span class="title">Connexion</span>
+                    <div class="input-field">
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" placeholder="Votre email" required autofocus>
+                        <i class="uil uil-envelope icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" name="password" id="inputPassword" class="form-control password" autocomplete="current-password" placeholder="Votre mot de passe" required>
+                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-eye-slash showHidePw"></i>
+                    </div>
+
+                    <div class="checkbox-text">
+                        <div class="checkbox-content">
+                            <input type="checkbox" id="logCheck">
+                            <label for="logCheck" class="text">Se souvenir de moi</label>
+                        </div>
+
+                        <a href="#" class="text forgot-password-link">Mot de passe oublié?</a>
+                    </div>
+
+                    <div class="input-field button">
+                        <a href="planning.html">
+                            <button type="submit">
+                                Se connecter
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/connexion.js') }}"></script>
+{% endblock %}

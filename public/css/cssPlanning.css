@@ -1,0 +1,44 @@
+:root{
+    /* ===== Colors ===== */
+    --primary-color: #695CFE;
+}
+
+body.dark{
+    --primary-dark-color: #ccc;
+}
+
+.sidebar #planning a{
+    border: 2px solid var(--primary-color);
+    transition: none;
+}
+.sidebar #planning a .icon,
+.sidebar #planning a .text{
+    color: var(--primary-color);
+    transition: none;
+}
+
+.sidebar #planning a:hover{
+    background-color: transparent;
+}
+.sidebar #planning a:hover .icon,
+.sidebar #planning a:hover .text{
+    color: var(--primary-color);
+}
+
+body.dark .sidebar #planning a{
+    border: 2px solid var(--primary-dark-color);
+}
+body.dark .sidebar #planning .icon,
+body.dark .sidebar #planning .text{
+    color: var(--primary-dark-color);
+}
+.fc-scroller::-webkit-scrollbar {
+    width: 20px;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    border: 5px solid transparent;
+    background-clip: content-box;
+    background-color: var(--primary-color);
+}
