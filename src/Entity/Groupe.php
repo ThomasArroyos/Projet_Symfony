@@ -13,7 +13,6 @@ class Groupe
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="groupeId")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -23,19 +22,37 @@ class Groupe
      */
     private $specialite;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="groupes")
+     * @ORM\JoinColumn(name="classeId")
+     */
+    private $classeId;
+
+
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getSpecialite(): ?string
+    public function getSpecialite()
     {
         return $this->specialite;
     }
 
-    public function setSpecialite(string $specialite): self
+    public function setSpecialite($specialite): void
     {
         $this->specialite = $specialite;
+    }
+
+    public function getClasseId(): ?Classe
+    {
+        return $this->classeId;
+    }
+
+    public function setClasseId(?Classe $classeId): self
+    {
+        $this->classeId = $classeId;
 
         return $this;
     }

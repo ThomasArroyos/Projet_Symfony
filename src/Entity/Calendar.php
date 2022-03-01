@@ -46,14 +46,14 @@ class Calendar
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @ORM\OneToMany(targetEntity=Matiere::class, mappedBy="nomMatiere")
+     * @ORM\ManyToMany(targetEntity=Matiere::class, inversedBy="calendars")
      */
-    private $nomMatiere;
+    private $matiere;
 
     public function __construct()
     {
         $this->nomMatiere = new ArrayCollection();
+        $this->matiere = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,29 +124,23 @@ class Calendar
     /**
      * @return Collection<int, Matiere>
      */
-    public function getNomMatiere(): Collection
+    public function getMatiere(): Collection
     {
-        return $this->nomMatiere;
+        return $this->matiere;
     }
 
-    public function addNomMatiere(Matiere $nomMatiere): self
+    public function addMatiere(Matiere $matiere): self
     {
-        if (!$this->nomMatiere->contains($nomMatiere)) {
-            $this->nomMatiere[] = $nomMatiere;
-            $nomMatiere->setCalendar($this);
+        if (!$this->matiere->contains($matiere)) {
+            $this->matiere[] = $matiere;
         }
 
         return $this;
     }
 
-    public function removeNomMatiere(Matiere $nomMatiere): self
+    public function removeMatiere(Matiere $matiere): self
     {
-        if ($this->nomMatiere->removeElement($nomMatiere)) {
-            // set the owning side to null (unless already changed)
-            if ($nomMatiere->getCalendar() === $this) {
-                $nomMatiere->setCalendar(null);
-            }
-        }
+        $this->matiere->removeElement($matiere);
 
         return $this;
     }

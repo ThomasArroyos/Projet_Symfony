@@ -20,49 +20,40 @@ class Classe
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="classes")
-     */
-    private $libelleClasse;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $nbEleveTotal;
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\OneToMany(targetEntity=Groupe::class, mappedBy="id")
+     * @ORM\Column(type="string", length=50)
      */
-    private $groupeId;
+    private $libelleClasse;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     * @ORM\ManyToMany(targetEntity=Matiere::class, mappedBy="classes")
+     * @ORM\OneToMany(targetEntity=Groupe::class, mappedBy="classeId")
+     */
+    private $groupes;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Matiere::class, inversedBy="classes")
      */
     private $matieres;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Formation::class, mappedBy="classes")
+     */
+    private $formations;
+
     public function __construct()
     {
-        $this->groupeId = new ArrayCollection();
+        $this->groupes = new ArrayCollection();
         $this->matieres = new ArrayCollection();
+        $this->formations = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLibelleClasse(): ?string
-    {
-        return $this->libelleClasse;
-    }
-
-    public function setLibelleClasse(string $libelleClasse): self
-    {
-        $this->libelleClasse = $libelleClasse;
-
-        return $this;
     }
 
     public function getNbEleveTotal(): ?int
@@ -77,30 +68,40 @@ class Classe
         return $this;
     }
 
+    public function getLibelleClasse(): ArrayCollection
+    {
+        return $this->libelleClasse;
+    }
+
+    public function setLibelleClasse(ArrayCollection $libelleClasse): void
+    {
+        $this->libelleClasse = $libelleClasse;
+    }
+
     /**
      * @return Collection<int, Groupe>
      */
-    public function getGroupeId(): Collection
+    public function getGroupes(): Collection
     {
-        return $this->groupeId;
+        return $this->groupes;
     }
 
-    public function addGroupeId(Groupe $groupeId): self
+    public function addGroupe(Groupe $groupe): self
     {
-        if (!$this->groupeId->contains($groupeId)) {
-            $this->groupeId[] = $groupeId;
-            $groupeId->setClasse($this);
+        if (!$this->groupes->contains($groupe)) {
+            $this->groupes[] = $groupe;
+            $groupe->setClasseId($this);
         }
 
         return $this;
     }
 
-    public function removeGroupeId(Groupe $groupeId): self
+    public function removeGroupe(Groupe $groupe): self
     {
-        if ($this->groupeId->removeElement($groupeId)) {
+        if ($this->groupes->removeElement($groupe)) {
             // set the owning side to null (unless already changed)
-            if ($groupeId->getClasse() === $this) {
-                $groupeId->setClasse(null);
+            if ($groupe->getClasseId() === $this) {
+                $groupe->setClasseId(null);
             }
         }
 
@@ -108,7 +109,7 @@ class Classe
     }
 
     /**
-     * @return Collection<string, Matiere>
+     * @return Collection<int, Matiere>
      */
     public function getMatieres(): Collection
     {
@@ -119,7 +120,6 @@ class Classe
     {
         if (!$this->matieres->contains($matiere)) {
             $this->matieres[] = $matiere;
-            $matiere->addClass($this);
         }
 
         return $this;
@@ -127,8 +127,33 @@ class Classe
 
     public function removeMatiere(Matiere $matiere): self
     {
-        if ($this->matieres->removeElement($matiere)) {
-            $matiere->removeClass($this);
+        $this->matieres->removeElement($matiere);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormations(): Collection
+    {
+        return $this->formations;
+    }
+
+    public function addFormation(Formation $formation): self
+    {
+        if (!$this->formations->contains($formation)) {
+            $this->formations[] = $formation;
+            $formation->addClass($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormation(Formation $formation): self
+    {
+        if ($this->formations->removeElement($formation)) {
+            $formation->removeClass($this);
         }
 
         return $this;

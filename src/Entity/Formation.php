@@ -40,14 +40,12 @@ class Formation
     private $dureeMatieres;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     * @ORM\ManyToMany(targetEntity=Matiere::class, mappedBy="nomMatiere")
+     * @ORM\ManyToMany(targetEntity=Matiere::class, inversedBy="formations")
      */
     private $matieres;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     * @ORM\OneToMany(targetEntity=Classe::class, mappedBy="libelleClasse")
+     * @ORM\ManyToMany(targetEntity=Classe::class, inversedBy="formations")
      */
     private $classes;
 
@@ -111,7 +109,7 @@ class Formation
     }
 
     /**
-     * @return Collection<string, Matiere>
+     * @return Collection<int, Matiere>
      */
     public function getMatieres(): Collection
     {
@@ -122,7 +120,6 @@ class Formation
     {
         if (!$this->matieres->contains($matiere)) {
             $this->matieres[] = $matiere;
-            $matiere->addIntervenantAffecte($this);
         }
 
         return $this;
@@ -130,15 +127,13 @@ class Formation
 
     public function removeMatiere(Matiere $matiere): self
     {
-        if ($this->matieres->removeElement($matiere)) {
-            $matiere->removeIntervenantAffecte($this);
-        }
+        $this->matieres->removeElement($matiere);
 
         return $this;
     }
 
     /**
-     * @return Collection<string, Classe>
+     * @return Collection<int, Classe>
      */
     public function getClasses(): Collection
     {
@@ -149,7 +144,6 @@ class Formation
     {
         if (!$this->classes->contains($class)) {
             $this->classes[] = $class;
-            $class->setFormation($this);
         }
 
         return $this;
@@ -157,12 +151,7 @@ class Formation
 
     public function removeClass(Classe $class): self
     {
-        if ($this->classes->removeElement($class)) {
-            // set the owning side to null (unless already changed)
-            if ($class->getFormation() === $this) {
-                $class->setFormation(null);
-            }
-        }
+        $this->classes->removeElement($class);
 
         return $this;
     }

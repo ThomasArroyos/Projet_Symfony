@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -38,10 +39,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @ORM\ManyToMany(targetEntity=Matiere::class, inversedBy="nomMatiere")
+     * @ORM\ManyToMany(targetEntity=Matiere::class, inversedBy="users")
      */
     private $matieres;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Calendar::class, cascade={"persist", "remove"})
+     */
+    private $calendrier;
+
+    public function __construct()
+    {
+        $this->matieres = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -133,25 +143,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<string, Matiere>
+     * @return Collection<int, Matiere>
      */
     public function getMatieres(): Collection
     {
         return $this->matieres;
     }
 
-    public function addMatieres(Matiere $matieres): self
+    public function addMatiere(Matiere $matiere): self
     {
-        if (!$this->matieres->contains($matieres)) {
-            $this->matieres[] = $matieres;
+        if (!$this->matieres->contains($matiere)) {
+            $this->matieres[] = $matiere;
         }
 
         return $this;
     }
 
-    public function removeMatieres(Matiere $matieres): self
+    public function removeMatiere(Matiere $matiere): self
     {
-        $this->matieres->removeElement($matieres);
+        $this->matieres->removeElement($matiere);
+
+        return $this;
+    }
+
+    public function getCalendrier(): ?Calendar
+    {
+        return $this->calendrier;
+    }
+
+    public function setCalendrier(?Calendar $calendrier): self
+    {
+        $this->calendrier = $calendrier;
 
         return $this;
     }

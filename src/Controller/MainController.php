@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CalendarRepository;
+use App\Repository\MatiereRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,9 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/planning', name: 'main')]
-    public function index(CalendarRepository $calendar): Response
+    public function index(CalendarRepository $calendar, MatiereRepository $matiere): Response
     {
         session_start();
+
+        $tabMatiere = $matiere->findAll();
+        dd($tabMatiere);
 
         $username = $_SESSION['_sf2_attributes']['_security.last_username'];
         $rolesUser = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
