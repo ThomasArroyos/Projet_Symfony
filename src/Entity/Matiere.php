@@ -20,7 +20,10 @@ class Matiere
     private $id;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=50)
+     * @ORM\ManyToMany(targetEntity=Formation::class, inversedBy="matieres")
+     * @ORM\ManyToOne(targetEntity=Calendar::class, inversedBy="nomMatiere")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="matieres")
      */
     private $nomMatiere;
 
@@ -30,13 +33,24 @@ class Matiere
     private $dureeTotale;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="matieres")
+     * @ORM\OneToOne(targetEntity=Couleur::class, cascade={"persist", "remove"})
+     */
+    private $couleurMatiere;
+
+    /**
+     * @ORM\Column(type="string", length=50)
      */
     private $intervenantAffecte;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Classe::class, inversedBy="matieres")
+     */
+    private $classes;
 
     public function __construct()
     {
         $this->intervenantAffecte = new ArrayCollection();
+        $this->classes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -44,7 +58,10 @@ class Matiere
         return $this->id;
     }
 
-    public function getNomMatiere(): ?string
+    /**
+     * @return Collection<string, Formation, User>
+     */
+    public function getNomMatiere(): Collection
     {
         return $this->nomMatiere;
     }
@@ -68,26 +85,54 @@ class Matiere
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getIntervenantAffecte(): Collection
+    public function getCouleurMatiere(): ?Couleur
     {
-        return $this->intervenantAffecte;
+        return $this->couleurMatiere;
     }
 
-    public function addIntervenantAffecte(User $intervenantAffecte): self
+    public function setCouleurMatiere(?Couleur $couleurMatiere): self
     {
-        if (!$this->intervenantAffecte->contains($intervenantAffecte)) {
-            $this->intervenantAffecte[] = $intervenantAffecte;
+        $this->couleurMatiere = $couleurMatiere;
+
+        return $this;
+    }
+
+    public function addNomMatiere(Formation $nomMatiere): self
+    {
+        if (!$this->nomMatiere->contains($nomMatiere)) {
+            $this->nomMatiere[] = $nomMatiere;
         }
 
         return $this;
     }
 
-    public function removeIntervenantAffecte(User $intervenantAffecte): self
+    public function removeNomMatiere(Formation $nomMatiere): self
     {
-        $this->intervenantAffecte->removeElement($intervenantAffecte);
+        $this->nomMatiere->removeElement($nomMatiere);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<string, Classe>
+     */
+    public function getClasses(): Collection
+    {
+        return $this->classes;
+    }
+
+    public function addClass(Classe $class): self
+    {
+        if (!$this->classes->contains($class)) {
+            $this->classes[] = $class;
+        }
+
+        return $this;
+    }
+
+    public function removeClass(Classe $class): self
+    {
+        $this->classes->removeElement($class);
 
         return $this;
     }
