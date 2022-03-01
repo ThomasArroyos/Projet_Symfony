@@ -3,11 +3,12 @@
 {% block title %}CFPI | Calendrier{% endblock %}
 
 {% block stylesheets %}
-    <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
+    {{ /* <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/css.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet' />
+    */}}
 {% endblock %}
 
 {% block body %}
@@ -168,24 +169,10 @@
 {% endblock %}
 
 {% block javascripts %}
-    <!--<script src="{#  {{ asset('js/calendar.js') }}#}"></script>-->
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/darkMode.js') }}"></script>
-    <script src="{{ asset('js/monthGridYear.js') }}"></script>
-    <!--script src="{#{{ asset('js/experimentalYearView.js') }}#}"></script-->
     <script>
         window.onload = function(){
-
-            $( "#logo" ).click(function() {
-                xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        //document.getElementById("txtHint").innerHTML = this.responseText;
-                    }
-                };
-                xhttp.open("GET", `/api/search/1`, true);
-                xhttp.send();
-            });
 
             let lastEventClicked;
             let lastStartTime;

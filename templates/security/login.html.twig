@@ -3,23 +3,13 @@
 {% block title %}CFPI | Connexion{% endblock %}
 
 {% block stylesheets %}
-    <link href="{{ asset('css/form.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/connexion.css') }}" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 {% endblock %}
 
 {% block body %}
     <form method="post">
-        {# {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-            </div>
-        {% endif %} #}
-
         <div class="container">
             <div class="forms">
                 <div class="form login">
@@ -54,54 +44,10 @@
             </div>
         </div>
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
-
-        {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-        #}
-
-        <!-- <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>-->
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
     </form>
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-    const container = document.querySelector(".container"),
-    pwShowHide = document.querySelectorAll(".showHidePw"),
-    pwFields = document.querySelectorAll(".password"),
-    forgot_password_link = document.querySelector(".forgot-password-link"),
-    retour = document.querySelector(".retour-link");
-
-    //   js code to show/hide password and change icon
-    pwShowHide.forEach(eyeIcon =>{
-    eyeIcon.addEventListener("click", ()=>{
-    pwFields.forEach(pwField =>{
-    if(pwField.type ==="password"){
-    pwField.type = "text";
-
-    pwShowHide.forEach(icon =>{
-    icon.classList.replace("uil-eye-slash", "uil-eye");
-    })
-    }else{
-    pwField.type = "password";
-
-    pwShowHide.forEach(icon =>{
-    icon.classList.replace("uil-eye", "uil-eye-slash");
-    })
-    }
-    })
-    })
-    })
-    </script>
+    <script src="{{ asset('js/connexion.js') }}"></script>
 {% endblock %}

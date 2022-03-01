@@ -324,7 +324,11 @@ class ApiController extends AbstractController
             $matiere->setDureeTotale($donnees->dureeTotale);
 
             if ($donnees->intervenantAffecte != "Personne") {
-
+                $em1 = $this->getDoctrine()->getManager();
+                $entrys = $em1->getRepository('App:User')->findBy(['email' => $donnees->intervenantAffecte]);
+                foreach ($entrys as $entry) {
+                    //$matiere->
+                }
             }
 
             $em = $this->getDoctrine()->getManager();
