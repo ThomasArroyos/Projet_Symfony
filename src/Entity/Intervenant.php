@@ -30,11 +30,6 @@ class Intervenant
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $email;
-
-    /**
      * @ORM\Column(type="string", length=12, nullable=true)
      */
     private $telephone;
@@ -80,18 +75,6 @@ class Intervenant
     public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
 
         return $this;
     }
