@@ -44,6 +44,11 @@ class Intervenant
      */
     private $matiere;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $mot_de_passe;
+
     public function __construct()
     {
         $this->matiere = new ArrayCollection();
@@ -122,6 +127,18 @@ class Intervenant
     public function removeMatiere(Matiere $matiere): self
     {
         $this->matiere->removeElement($matiere);
+
+        return $this;
+    }
+
+    public function getMotDePasse(): ?string
+    {
+        return $this->mot_de_passe;
+    }
+
+    public function setMotDePasse(string $mot_de_passe): self
+    {
+        $this->mot_de_passe = $mot_de_passe;
 
         return $this;
     }

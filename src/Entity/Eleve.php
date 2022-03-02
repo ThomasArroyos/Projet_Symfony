@@ -37,6 +37,11 @@ class Eleve
      */
     private $telephone;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $mot_de_passe;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class Eleve
     public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getMotDePasse(): ?string
+    {
+        return $this->mot_de_passe;
+    }
+
+    public function setMotDePasse(string $mot_de_passe): self
+    {
+        $this->mot_de_passe = $mot_de_passe;
 
         return $this;
     }
