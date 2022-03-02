@@ -50,10 +50,16 @@ class Calendar
      */
     private $matiere;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Groupe::class, mappedBy="calendar")
+     */
+    private $groupes;
+
     public function __construct()
     {
         $this->nomMatiere = new ArrayCollection();
         $this->matiere = new ArrayCollection();
+        $this->groupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +147,36 @@ class Calendar
     public function removeMatiere(Matiere $matiere): self
     {
         $this->matiere->removeElement($matiere);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Groupe>
+     */
+    public function getGroupes(): Collection
+    {
+        return $this->groupes;
+    }
+
+    public function addGroupe(Groupe $groupe): self
+    {
+        if (!$this->groupes->contains($groupe)) {
+            $this->groupes[] = $groupe;
+            $groupe->setCalendar($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupe(Groupe $groupe): self
+    {
+        if ($this->groupes->removeElement($groupe)) {
+            // set the owning side to null (unless already changed)
+            if ($groupe->getCalendar() === $this) {
+                $groupe->setCalendar(null);
+            }
+        }
 
         return $this;
     }

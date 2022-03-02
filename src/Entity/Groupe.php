@@ -28,6 +28,12 @@ class Groupe
      */
     private $classeId;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Calendar::class, inversedBy="groupes")
+     * @ORM\JoinColumn(name="calendar")
+     */
+    private $calendar;
+
 
 
     public function getId(): ?int
@@ -53,6 +59,18 @@ class Groupe
     public function setClasseId(?Classe $classeId): self
     {
         $this->classeId = $classeId;
+
+        return $this;
+    }
+
+    public function getCalendar(): ?Calendar
+    {
+        return $this->calendar;
+    }
+
+    public function setCalendar(?Calendar $calendar): self
+    {
+        $this->calendar = $calendar;
 
         return $this;
     }

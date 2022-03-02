@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220301234907 extends AbstractMigration
+final class Version20220302124630 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -28,7 +28,7 @@ final class Version20220301234907 extends AbstractMigration
         $this->addSql('CREATE TABLE formation (id INT AUTO_INCREMENT NOT NULL, nom_formation VARCHAR(50) NOT NULL, date_debut_formation DATETIME NOT NULL, date_fin_formation DATETIME NOT NULL, duree_matieres DOUBLE PRECISION NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE formation_matiere (formation_id INT NOT NULL, matiere_id INT NOT NULL, INDEX IDX_D5EB12315200282E (formation_id), INDEX IDX_D5EB1231F46CD258 (matiere_id), PRIMARY KEY(formation_id, matiere_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE formation_classe (formation_id INT NOT NULL, classe_id INT NOT NULL, INDEX IDX_AF9EB1BB5200282E (formation_id), INDEX IDX_AF9EB1BB8F5EA509 (classe_id), PRIMARY KEY(formation_id, classe_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE groupe (id INT AUTO_INCREMENT NOT NULL, specialite VARCHAR(50) NOT NULL, classeId INT DEFAULT NULL, INDEX IDX_4B98C2156784FF4 (classeId), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE groupe (id INT AUTO_INCREMENT NOT NULL, calendar INT DEFAULT NULL, specialite VARCHAR(50) NOT NULL, classeId INT DEFAULT NULL, INDEX IDX_4B98C2156784FF4 (classeId), INDEX IDX_4B98C216EA9A146 (calendar), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE matiere (id INT AUTO_INCREMENT NOT NULL, duree_totale DOUBLE PRECISION NOT NULL, intervenant_affecte VARCHAR(50) NOT NULL, nom_matiere VARCHAR(50) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, calendrier_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), UNIQUE INDEX UNIQ_8D93D649FF52FC51 (calendrier_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_matiere (user_id INT NOT NULL, matiere_id INT NOT NULL, INDEX IDX_C8194940A76ED395 (user_id), INDEX IDX_C8194940F46CD258 (matiere_id), PRIMARY KEY(user_id, matiere_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -42,6 +42,7 @@ final class Version20220301234907 extends AbstractMigration
         $this->addSql('ALTER TABLE formation_classe ADD CONSTRAINT FK_AF9EB1BB5200282E FOREIGN KEY (formation_id) REFERENCES formation (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE formation_classe ADD CONSTRAINT FK_AF9EB1BB8F5EA509 FOREIGN KEY (classe_id) REFERENCES classe (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE groupe ADD CONSTRAINT FK_4B98C2156784FF4 FOREIGN KEY (classeId) REFERENCES classe (id)');
+        $this->addSql('ALTER TABLE groupe ADD CONSTRAINT FK_4B98C216EA9A146 FOREIGN KEY (calendar) REFERENCES calendar (id)');
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D649FF52FC51 FOREIGN KEY (calendrier_id) REFERENCES calendar (id)');
         $this->addSql('ALTER TABLE user_matiere ADD CONSTRAINT FK_C8194940A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE user_matiere ADD CONSTRAINT FK_C8194940F46CD258 FOREIGN KEY (matiere_id) REFERENCES matiere (id) ON DELETE CASCADE');
@@ -51,6 +52,7 @@ final class Version20220301234907 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE calendar_matiere DROP FOREIGN KEY FK_F2632C8DA40A2C8');
+        $this->addSql('ALTER TABLE groupe DROP FOREIGN KEY FK_4B98C216EA9A146');
         $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D649FF52FC51');
         $this->addSql('ALTER TABLE classe_matiere DROP FOREIGN KEY FK_EB8D372B8F5EA509');
         $this->addSql('ALTER TABLE formation_classe DROP FOREIGN KEY FK_AF9EB1BB8F5EA509');
