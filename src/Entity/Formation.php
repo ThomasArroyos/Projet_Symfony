@@ -20,39 +20,28 @@ class Formation
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=255)
      */
-    private $nomFormation;
+    private $libele;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $dateDebutFormation;
+    private $date_debut;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $dateFinFormation;
+    private $date_fin;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\ManyToMany(targetEntity=Specialite::class, inversedBy="formations")
      */
-    private $dureeMatieres;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Matiere::class, inversedBy="formations")
-     */
-    private $matieres;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Classe::class, inversedBy="formations")
-     */
-    private $classes;
+    private $specialite;
 
     public function __construct()
     {
-        $this->matieres = new ArrayCollection();
-        $this->classes = new ArrayCollection();
+        $this->specialite = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -60,98 +49,62 @@ class Formation
         return $this->id;
     }
 
-    public function getNomFormation(): ?string
+    public function getLibele(): ?string
     {
-        return $this->nomFormation;
+        return $this->libele;
     }
 
-    public function setNomFormation(string $nomFormation): self
+    public function setLibele(string $libele): self
     {
-        $this->nomFormation = $nomFormation;
+        $this->libele = $libele;
 
         return $this;
     }
 
-    public function getDateDebutFormation(): ?\DateTimeInterface
+    public function getDateDebut(): ?\DateTimeInterface
     {
-        return $this->dateDebutFormation;
+        return $this->date_debut;
     }
 
-    public function setDateDebutFormation(\DateTimeInterface $dateDebutFormation): self
+    public function setDateDebut(\DateTimeInterface $date_debut): self
     {
-        $this->dateDebutFormation = $dateDebutFormation;
+        $this->date_debut = $date_debut;
 
         return $this;
     }
 
-    public function getDateFinFormation(): ?\DateTimeInterface
+    public function getDateFin(): ?\DateTimeInterface
     {
-        return $this->dateFinFormation;
+        return $this->date_fin;
     }
 
-    public function setDateFinFormation(\DateTimeInterface $dateFinFormation): self
+    public function setDateFin(\DateTimeInterface $date_fin): self
     {
-        $this->dateFinFormation = $dateFinFormation;
-
-        return $this;
-    }
-
-    public function getDureeMatieres(): ?float
-    {
-        return $this->dureeMatieres;
-    }
-
-    public function setDureeMatieres(float $dureeMatieres): self
-    {
-        $this->dureeMatieres = $dureeMatieres;
+        $this->date_fin = $date_fin;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Matiere>
+     * @return Collection<int, Specialite>
      */
-    public function getMatieres(): Collection
+    public function getSpecialite(): Collection
     {
-        return $this->matieres;
+        return $this->specialite;
     }
 
-    public function addMatiere(Matiere $matiere): self
+    public function addSpecialite(Specialite $specialite): self
     {
-        if (!$this->matieres->contains($matiere)) {
-            $this->matieres[] = $matiere;
+        if (!$this->specialite->contains($specialite)) {
+            $this->specialite[] = $specialite;
         }
 
         return $this;
     }
 
-    public function removeMatiere(Matiere $matiere): self
+    public function removeSpecialite(Specialite $specialite): self
     {
-        $this->matieres->removeElement($matiere);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Classe>
-     */
-    public function getClasses(): Collection
-    {
-        return $this->classes;
-    }
-
-    public function addClass(Classe $class): self
-    {
-        if (!$this->classes->contains($class)) {
-            $this->classes[] = $class;
-        }
-
-        return $this;
-    }
-
-    public function removeClass(Classe $class): self
-    {
-        $this->classes->removeElement($class);
+        $this->specialite->removeElement($specialite);
 
         return $this;
     }

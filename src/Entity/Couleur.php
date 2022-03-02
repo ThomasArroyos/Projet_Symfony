@@ -20,71 +20,55 @@ class Couleur
     /**
      * @ORM\Column(type="string", length=7)
      */
-    private $backgroundColor;
+    private $fond;
 
     /**
      * @ORM\Column(type="string", length=7)
      */
-    private $borderColor;
+    private $bordure;
 
     /**
      * @ORM\Column(type="string", length=7)
      */
-    private $color;
+    private $texte;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Matiere::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="couleurName")
-     */
-    private $couleurName;
-
-    public function getId(): ?Matiere
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getBackgroundColor(): ?string
+    public function getFond(): ?string
     {
-        return $this->backgroundColor;
+        return $this->fond;
     }
 
-    public function setBackgroundColor(string $backgroundColor): self
+    public function setFond(string $fond): self
     {
-        $this->backgroundColor = $backgroundColor;
+        $this->fond = $fond;
 
         return $this;
     }
 
-    public function getBorderColor(): ?string
+    public function getBordure(): ?string
     {
-        return $this->borderColor;
+        return $this->bordure;
     }
 
-    public function setBorderColor(string $borderColor): self
+    public function setBordure(string $bordure): self
     {
-        $this->borderColor = $borderColor;
+        $this->bordure = $bordure;
 
         return $this;
     }
 
-    public function getColor()
+    public function getTexte(): ?string
     {
-        return $this->color;
+        return $this->texte;
     }
 
-    public function setColor($color): void
+    public function setTexte(string $texte): self
     {
-        $this->color = $color;
-    }
-
-    public function getCouleurName(): ?Matiere
-    {
-        return $this->couleurName;
-    }
-
-    public function setCouleurName(?Matiere $couleurName): self
-    {
-        $this->couleurName = $couleurName;
+        $this->texte = $texte;
 
         return $this;
     }
