@@ -38,9 +38,10 @@ class Eleve
     private $telephone;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="eleve", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $mot_de_passe;
+    private $compte;
 
     public function getId(): ?int
     {
@@ -95,14 +96,14 @@ class Eleve
         return $this;
     }
 
-    public function getMotDePasse(): ?string
+    public function getCompte(): ?User
     {
-        return $this->mot_de_passe;
+        return $this->compte;
     }
 
-    public function setMotDePasse(string $mot_de_passe): self
+    public function setCompte(User $compte): self
     {
-        $this->mot_de_passe = $mot_de_passe;
+        $this->compte = $compte;
 
         return $this;
     }
