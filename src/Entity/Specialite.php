@@ -39,11 +39,17 @@ class Specialite
      */
     private $evenements;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Intervenant::class, mappedBy="specialite")
+     */
+    private $intervenants;
+
     public function __construct()
     {
         $this->matiere = new ArrayCollection();
         $this->formations = new ArrayCollection();
         $this->evenements = new ArrayCollection();
+        $this->intervenants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,6 +145,33 @@ class Specialite
             if ($evenement->getSpecialite() === $this) {
                 $evenement->setSpecialite(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervenant>
+     */
+    public function getIntervenants(): Collection
+    {
+        return $this->intervenants;
+    }
+
+    public function addIntervenant(Intervenant $intervenant): self
+    {
+        if (!$this->intervenants->contains($intervenant)) {
+            $this->intervenants[] = $intervenant;
+            $intervenant->addSpecialite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervenant(Intervenant $intervenant): self
+    {
+        if ($this->intervenants->removeElement($intervenant)) {
+            $intervenant->removeSpecialite($this);
         }
 
         return $this;

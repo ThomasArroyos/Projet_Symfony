@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220302202935 extends AbstractMigration
+final class Version20220302204236 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,7 +22,7 @@ final class Version20220302202935 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE couleur (id INT AUTO_INCREMENT NOT NULL, fond VARCHAR(7) NOT NULL, bordure VARCHAR(7) NOT NULL, texte VARCHAR(7) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE eleve (id INT AUTO_INCREMENT NOT NULL, compte_id INT NOT NULL, nom VARCHAR(255) NOT NULL, prenom VARCHAR(255) NOT NULL, telephone VARCHAR(12) NOT NULL, UNIQUE INDEX UNIQ_ECA105F7F2C56620 (compte_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE evenement (id INT AUTO_INCREMENT NOT NULL, titre VARCHAR(255) NOT NULL, date_debut DATETIME NOT NULL, date_fin DATETIME DEFAULT NULL, journee_entiere TINYINT(1) NOT NULL, chevaucher TINYINT(1) NOT NULL, modifiable TINYINT(1) NOT NULL, accepte TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE evenement (id INT AUTO_INCREMENT NOT NULL, intervenant_id INT DEFAULT NULL, matiere_id INT DEFAULT NULL, specialite_id INT DEFAULT NULL, titre VARCHAR(255) NOT NULL, date_debut DATETIME NOT NULL, date_fin DATETIME DEFAULT NULL, journee_entiere TINYINT(1) NOT NULL, chevaucher TINYINT(1) NOT NULL, modifiable TINYINT(1) NOT NULL, accepte TINYINT(1) NOT NULL, INDEX IDX_B26681EAB9A1716 (intervenant_id), INDEX IDX_B26681EF46CD258 (matiere_id), INDEX IDX_B26681E2195E0F0 (specialite_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE formation (id INT AUTO_INCREMENT NOT NULL, libele VARCHAR(255) NOT NULL, date_debut DATETIME NOT NULL, date_fin DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE formation_specialite (formation_id INT NOT NULL, specialite_id INT NOT NULL, INDEX IDX_1F7E2FF85200282E (formation_id), INDEX IDX_1F7E2FF82195E0F0 (specialite_id), PRIMARY KEY(formation_id, specialite_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE intervenant (id INT AUTO_INCREMENT NOT NULL, compte_id INT NOT NULL, nom VARCHAR(255) NOT NULL, prenom VARCHAR(255) NOT NULL, telephone VARCHAR(12) DEFAULT NULL, UNIQUE INDEX UNIQ_73D0145CF2C56620 (compte_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -32,6 +32,9 @@ final class Version20220302202935 extends AbstractMigration
         $this->addSql('CREATE TABLE specialite_matiere (specialite_id INT NOT NULL, matiere_id INT NOT NULL, INDEX IDX_AF1D45CE2195E0F0 (specialite_id), INDEX IDX_AF1D45CEF46CD258 (matiere_id), PRIMARY KEY(specialite_id, matiere_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE eleve ADD CONSTRAINT FK_ECA105F7F2C56620 FOREIGN KEY (compte_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE evenement ADD CONSTRAINT FK_B26681EAB9A1716 FOREIGN KEY (intervenant_id) REFERENCES intervenant (id)');
+        $this->addSql('ALTER TABLE evenement ADD CONSTRAINT FK_B26681EF46CD258 FOREIGN KEY (matiere_id) REFERENCES matiere (id)');
+        $this->addSql('ALTER TABLE evenement ADD CONSTRAINT FK_B26681E2195E0F0 FOREIGN KEY (specialite_id) REFERENCES specialite (id)');
         $this->addSql('ALTER TABLE formation_specialite ADD CONSTRAINT FK_1F7E2FF85200282E FOREIGN KEY (formation_id) REFERENCES formation (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE formation_specialite ADD CONSTRAINT FK_1F7E2FF82195E0F0 FOREIGN KEY (specialite_id) REFERENCES specialite (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE intervenant ADD CONSTRAINT FK_73D0145CF2C56620 FOREIGN KEY (compte_id) REFERENCES user (id)');
@@ -47,9 +50,12 @@ final class Version20220302202935 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE matiere DROP FOREIGN KEY FK_9014574AC31BA576');
         $this->addSql('ALTER TABLE formation_specialite DROP FOREIGN KEY FK_1F7E2FF85200282E');
+        $this->addSql('ALTER TABLE evenement DROP FOREIGN KEY FK_B26681EAB9A1716');
         $this->addSql('ALTER TABLE intervenant_matiere DROP FOREIGN KEY FK_D9086E53AB9A1716');
+        $this->addSql('ALTER TABLE evenement DROP FOREIGN KEY FK_B26681EF46CD258');
         $this->addSql('ALTER TABLE intervenant_matiere DROP FOREIGN KEY FK_D9086E53F46CD258');
         $this->addSql('ALTER TABLE specialite_matiere DROP FOREIGN KEY FK_AF1D45CEF46CD258');
+        $this->addSql('ALTER TABLE evenement DROP FOREIGN KEY FK_B26681E2195E0F0');
         $this->addSql('ALTER TABLE formation_specialite DROP FOREIGN KEY FK_1F7E2FF82195E0F0');
         $this->addSql('ALTER TABLE specialite_matiere DROP FOREIGN KEY FK_AF1D45CE2195E0F0');
         $this->addSql('ALTER TABLE eleve DROP FOREIGN KEY FK_ECA105F7F2C56620');

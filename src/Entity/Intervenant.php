@@ -50,10 +50,16 @@ class Intervenant
      */
     private $evenements;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Specialite::class, inversedBy="intervenants")
+     */
+    private $specialite;
+
     public function __construct()
     {
         $this->matiere = new ArrayCollection();
         $this->evenements = new ArrayCollection();
+        $this->specialite = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,6 +165,30 @@ class Intervenant
                 $evenement->setIntervenant(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Specialite>
+     */
+    public function getSpecialite(): Collection
+    {
+        return $this->specialite;
+    }
+
+    public function addSpecialite(Specialite $specialite): self
+    {
+        if (!$this->specialite->contains($specialite)) {
+            $this->specialite[] = $specialite;
+        }
+
+        return $this;
+    }
+
+    public function removeSpecialite(Specialite $specialite): self
+    {
+        $this->specialite->removeElement($specialite);
 
         return $this;
     }

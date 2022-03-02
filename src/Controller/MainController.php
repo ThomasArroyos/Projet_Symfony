@@ -15,14 +15,14 @@ class MainController extends AbstractController
     #[Route('/planning', name: 'main')]
     public function index(EvenementRepository $evenement): Response
     {
+        dd(unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getIntervenant());
         $roles = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
         $email = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEmail();
 
         if ($roles[0] == 'ROLE_SECRETAIRE') {
-            dd($evenement->findAll());
             $occurence = $evenement->findAll();
         } else {
-            $occurence = $evenement->findBy(['email' => $email]);
+            $occurence = $evenement->findBy(['id_specialite' => $email]);
         }
 
         $rdvs = [];
