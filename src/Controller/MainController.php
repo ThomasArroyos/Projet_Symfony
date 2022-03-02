@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CalendarRepository;
+use App\Repository\EvenementRepository;
 use App\Repository\MatiereRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,20 +13,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/planning', name: 'main')]
-    public function index(CalendarRepository $calendar): Response
+    public function index(EvenementRepository $evenement): Response
     {
-        session_start();
+        $roles = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
+        $email = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEmail();
 
-        $username = $_SESSION['_sf2_attributes']['_security.last_username'];
-        $rolesUser = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
-        $emailUser = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEmail();
-
-        //$events = $calendar->findAll();
-
-        if ($rolesUser[0]=='ROLE_SECRETAIRE') {
-            $events = $calendar->findAll();
+        if ($roles[0] == 'ROLE_SECRETAIRE') {
+            dd($evenement->findAll());
+            $occurence = $evenement->findAll();
         } else {
-            $events = $calendar->findBy(['email' => $emailUser]);
+            $occurence = $evenement->findBy(['email' => $email]);
         }
 
         $rdvs = [];

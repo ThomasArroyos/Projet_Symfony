@@ -45,9 +45,15 @@ class Intervenant
      */
     private $compte;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Evenement::class, mappedBy="intervenant")
+     */
+    private $evenements;
+
     public function __construct()
     {
         $this->matiere = new ArrayCollection();
+        $this->evenements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,6 +129,36 @@ class Intervenant
     public function setCompte(User $compte): self
     {
         $this->compte = $compte;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evenement>
+     */
+    public function getEvenements(): Collection
+    {
+        return $this->evenements;
+    }
+
+    public function addEvenement(Evenement $evenement): self
+    {
+        if (!$this->evenements->contains($evenement)) {
+            $this->evenements[] = $evenement;
+            $evenement->setIntervenant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvenement(Evenement $evenement): self
+    {
+        if ($this->evenements->removeElement($evenement)) {
+            // set the owning side to null (unless already changed)
+            if ($evenement->getIntervenant() === $this) {
+                $evenement->setIntervenant(null);
+            }
+        }
 
         return $this;
     }

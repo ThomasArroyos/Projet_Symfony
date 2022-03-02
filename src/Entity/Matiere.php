@@ -45,10 +45,16 @@ class Matiere
      */
     private $specialites;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Evenement::class, mappedBy="matiere")
+     */
+    private $evenements;
+
     public function __construct()
     {
         $this->intervenants = new ArrayCollection();
         $this->specialites = new ArrayCollection();
+        $this->evenements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +147,36 @@ class Matiere
     {
         if ($this->specialites->removeElement($specialite)) {
             $specialite->removeMatiere($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evenement>
+     */
+    public function getEvenements(): Collection
+    {
+        return $this->evenements;
+    }
+
+    public function addEvenement(Evenement $evenement): self
+    {
+        if (!$this->evenements->contains($evenement)) {
+            $this->evenements[] = $evenement;
+            $evenement->setMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvenement(Evenement $evenement): self
+    {
+        if ($this->evenements->removeElement($evenement)) {
+            // set the owning side to null (unless already changed)
+            if ($evenement->getMatiere() === $this) {
+                $evenement->setMatiere(null);
+            }
         }
 
         return $this;

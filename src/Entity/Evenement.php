@@ -52,6 +52,21 @@ class Evenement
      */
     private $accepte;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Intervenant::class, inversedBy="evenements")
+     */
+    private $intervenant;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Matiere::class, inversedBy="evenements")
+     */
+    private $matiere;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Specialite::class, inversedBy="evenements")
+     */
+    private $specialite;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +152,42 @@ class Evenement
     public function setAccepte(bool $accepte): self
     {
         $this->accepte = $accepte;
+
+        return $this;
+    }
+
+    public function getIntervenant(): ?Intervenant
+    {
+        return $this->intervenant;
+    }
+
+    public function setIntervenant(?Intervenant $intervenant): self
+    {
+        $this->intervenant = $intervenant;
+
+        return $this;
+    }
+
+    public function getMatiere(): ?Matiere
+    {
+        return $this->matiere;
+    }
+
+    public function setMatiere(?Matiere $matiere): self
+    {
+        $this->matiere = $matiere;
+
+        return $this;
+    }
+
+    public function getSpecialite(): ?Specialite
+    {
+        return $this->specialite;
+    }
+
+    public function setSpecialite(?Specialite $specialite): self
+    {
+        $this->specialite = $specialite;
 
         return $this;
     }
