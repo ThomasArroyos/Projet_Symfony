@@ -36,15 +36,18 @@ class MainController extends AbstractController
             $rdvs[] = [
                 'id' => $occurence->getId(),
                 'title' => $occurence->getTitre(),
-                'start' => $occurence->getDateDebut()->format('Y-m-d H:i:s'),
-                'end' => $occurence->getDateFin()->format('Y-m-d H:i:s'),
+                'startRecur' => $occurence->getDateDebut()->format('Y-m-d H:i:s'),
+                'endRecur' => $occurence->getDateFin()->format('Y-m-d H:i:s'),
                 'backgroundColor' => $couleurs[0]->getFond(),
                 'borderColor' => $couleurs[0]->getBordure(),
                 'textColor' => $couleurs[0]->getTexte(),
                 'allDay' => $occurence->getJourneeEntiere(),
                 'editable' => $occurence->getModifiable(),
                 'overlap' => $occurence->getChevaucher(),
-                'display' => $occurence->getEnFond()
+                'display' => $occurence->getEnFond(),
+                'startTime' => $occurence->getTempsDebutRecurrence()->format('H:i:s'),
+                'endTime' => $occurence->getTempsFinRecurrence()->format('H:i:s'),
+                'daysOfWeek' => $occurence->getJoursRecurrence()
             ];
         }
 

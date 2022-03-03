@@ -72,6 +72,26 @@ class Evenement
      */
     private $en_fond;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $recurrent;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $jours_recurrence;
+
+    /**
+     * @ORM\Column(type="time", nullable=true)
+     */
+    private $temps_debut_recurrence;
+
+    /**
+     * @ORM\Column(type="time", nullable=true)
+     */
+    private $temps_fin_recurrence;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -205,6 +225,54 @@ class Evenement
     public function setEnFond(string $en_fond): self
     {
         $this->en_fond = $en_fond;
+
+        return $this;
+    }
+
+    public function getRecurrent(): ?bool
+    {
+        return $this->recurrent;
+    }
+
+    public function setRecurrent(bool $recurrent): self
+    {
+        $this->recurrent = $recurrent;
+
+        return $this;
+    }
+
+    public function getJoursRecurrence(): ?string
+    {
+        return $this->jours_recurrence;
+    }
+
+    public function setJoursRecurrence(?string $jours_recurrence): self
+    {
+        $this->jours_recurrence = $jours_recurrence;
+
+        return $this;
+    }
+
+    public function getTempsDebutRecurrence(): ?\DateTimeInterface
+    {
+        return $this->temps_debut_recurrence;
+    }
+
+    public function setTempsDebutRecurrence(?\DateTimeInterface $temps_debut_recurrence): self
+    {
+        $this->temps_debut_recurrence = $temps_debut_recurrence;
+
+        return $this;
+    }
+
+    public function getTempsFinRecurrence(): ?\DateTimeInterface
+    {
+        return $this->temps_fin_recurrence;
+    }
+
+    public function setTempsFinRecurrence(?\DateTimeInterface $temps_fin_recurrence): self
+    {
+        $this->temps_fin_recurrence = $temps_fin_recurrence;
 
         return $this;
     }
