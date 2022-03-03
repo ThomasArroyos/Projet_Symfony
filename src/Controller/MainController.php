@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Formation;
+use App\Entity\Intervenant;
 use App\Repository\CalendarRepository;
+use App\Repository\CouleurRepository;
 use App\Repository\EvenementRepository;
+use App\Repository\FormationRepository;
 use App\Repository\MatiereRepository;
 use App\Repository\UserRepository;
+use http\Env\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,32 +18,33 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/planning', name: 'main')]
-    public function index(EvenementRepository $evenement): Response
+    public function index(EvenementRepository $evenement,CouleurRepository $couleurRepository): Response
     {
-        dd(unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getIntervenant());
         $roles = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
         $email = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEmail();
 
         if ($roles[0] == 'ROLE_SECRETAIRE') {
-            $occurence = $evenement->findAll();
+            $occurences = $evenement->findAll();
         } else {
-            $occurence = $evenement->findBy(['id_specialite' => $email]);
+            $occurences = $evenement->findBy(['id_specialite' => '1']);
         }
 
         $rdvs = [];
 
-        foreach($events as $event){
+        foreach($occurences as $occurence){
+            $couleurs = $couleurRepository->findBy(['id' => $occurence->getMatiere()->getCouleur()->getId()]);
             $rdvs[] = [
-                'id' => $event->getId(),
-                'start' => $event->getStart()->format('Y-m-d H:i:s'),
-                'end' => $event->getEnd()->format('Y-m-d H:i:s'),
-                'title' => $event->getTitle(),
-                'email' => $event->getEmail(),
-                'description' => $event->getDescription(),
-                'backgroundColor' => $event->getBackgroundColor(),
-                'borderColor' => $event->getBorderColor(),
-                'textColor' => $event->getTextColor(),
-                'allDay' => $event->getAllDay(),
+                'id' => $occurence->getId(),
+                'title' => $occurence->getTitre(),
+                'start' => $occurence->getDateDebut()->format('Y-m-d H:i:s'),
+                'end' => $occurence->getDateFin()->format('Y-m-d H:i:s'),
+                'backgroundColor' => $couleurs[0]->getFond(),
+                'borderColor' => $couleurs[0]->getBordure(),
+                'textColor' => $couleurs[0]->getTexte(),
+                'allDay' => $occurence->getJourneeEntiere(),
+                'editable' => $occurence->getModifiable(),
+                'overlap' => $occurence->getChevaucher(),
+                'display' => $occurence->getEnFond()
             ];
         }
 

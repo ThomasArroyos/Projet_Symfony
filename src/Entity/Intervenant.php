@@ -6,6 +6,7 @@ use App\Repository\IntervenantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @ORM\Entity(repositoryClass=IntervenantRepository::class)
@@ -55,11 +56,18 @@ class Intervenant
      */
     private $specialite;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Formation::class, inversedBy="intervenants")
+     * @ORM\JoinTable(name="intervenant_formation")
+     */
+    private $formation;
+
     public function __construct()
     {
         $this->matiere = new ArrayCollection();
         $this->evenements = new ArrayCollection();
         $this->specialite = new ArrayCollection();
+        $this->formation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,6 +197,30 @@ class Intervenant
     public function removeSpecialite(Specialite $specialite): self
     {
         $this->specialite->removeElement($specialite);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormation():Collection
+    {
+        return $this->formation;
+    }
+
+    public function addFormation(Formation $formation): self
+    {
+        if (!$this->formation->contains($formation)) {
+            $this->formation[] = $formation;
+        }
+
+        return $this;
+    }
+
+    public function removeFormation(Formation $formation): self
+    {
+        $this->formation->removeElement($formation);
 
         return $this;
     }

@@ -3,12 +3,11 @@
 {% block title %}CFPI | Calendrier{% endblock %}
 
 {% block stylesheets %}
-    {{ /* <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/css.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet' />
-    */}}
 {% endblock %}
 
 {% block body %}
@@ -209,9 +208,6 @@
                     center: 'title',
                     end: 'dayGridMonth,timeGridWeek,monthGridYear'
                 },
-                view: {
-                  monthGridYear: MonthGridYear
-                },
                 events: {{ data|raw }},
                 editable: true,
                 eventResizableFromStart: true,
@@ -221,6 +217,7 @@
             calendar.render();
 
             calendar.on('select', (e) => {
+                console.log("Oui")
                 lastStartTime = e.startStr
                 lastEndTime = e.endStr
                 lastAllDay = e.allDay
@@ -256,6 +253,7 @@
             })
 
             calendar.on('eventChange', (e) => {
+                console.log(e.event)
                 let url = `/api/${e.event.id}/edit`
                 let donnees = {
                     "title": e.event.title,

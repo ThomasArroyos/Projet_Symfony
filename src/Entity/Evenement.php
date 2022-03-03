@@ -67,6 +67,11 @@ class Evenement
      */
     private $specialite;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $en_fond;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -188,6 +193,18 @@ class Evenement
     public function setSpecialite(?Specialite $specialite): self
     {
         $this->specialite = $specialite;
+
+        return $this;
+    }
+
+    public function getEnFond(): ?string
+    {
+        return $this->en_fond;
+    }
+
+    public function setEnFond(string $en_fond): self
+    {
+        $this->en_fond = $en_fond;
 
         return $this;
     }

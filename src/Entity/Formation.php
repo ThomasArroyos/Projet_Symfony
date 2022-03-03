@@ -39,9 +39,15 @@ class Formation
      */
     private $specialite;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Intervenant::class, mappedBy="formation")
+     */
+    private $intervenants;
+
     public function __construct()
     {
         $this->specialite = new ArrayCollection();
+        $this->intervenants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,6 +111,33 @@ class Formation
     public function removeSpecialite(Specialite $specialite): self
     {
         $this->specialite->removeElement($specialite);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervenant>
+     */
+    public function getIntervenants(): Collection
+    {
+        return $this->intervenants;
+    }
+
+    public function addIntervenant(Intervenant $intervenant): self
+    {
+        if (!$this->intervenants->contains($intervenant)) {
+            $this->intervenants[] = $intervenant;
+            $intervenant->addFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervenant(Intervenant $intervenant): self
+    {
+        if ($this->intervenants->removeElement($intervenant)) {
+            $intervenant->removeFormation($this);
+        }
 
         return $this;
     }
