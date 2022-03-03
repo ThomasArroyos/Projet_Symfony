@@ -223,7 +223,6 @@ body.dark .sidebar li a:hover .text{
 }
 .sidebar .menu-bar .mode{
     border-radius: 6px;
-    background-color: var(--primary-color-light);
     position: relative;
     transition: var(--tran-05);
 }

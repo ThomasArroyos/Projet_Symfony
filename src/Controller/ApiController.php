@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Calendar;
 use App\Entity\Matiere;
 use App\Entity\User;
+use App\Repository\EvenementRepository;
+use App\Repository\IntervenantRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -342,5 +344,24 @@ class ApiController extends AbstractController
             //Données incomplètes
             return new Response('Données incomplètes', 404);
         }
+    }
+
+    /**
+     * @Route ("/api/usermatiere/{id}", name="api_test", methods={"GET"})
+     */
+    public function apiTest(Request $request,IntervenantRepository $intervenantRepository)
+    {
+        //$evenementRepository->findBy();
+        /*$input_time = str_replace("T"," ",$request->attributes->get('_route_params')['heures']);
+        $occurences = $evenementRepository->findAll();
+        foreach ($occurences as $occurence) {
+            //dd([$input_time, $occurence->getDateDebut()->format('Y-m-d H:i:s'), $occurence->getDateFin()->format('Y-m-d H:i:s')]);
+            if (($input_time < $occurence->getDateDebut()->format('Y-m-d H:i:s'))||($input_time > $occurence->getDateFin()->format('Y-m-d H:i:s'))) {
+                $code = 200;
+            } else {
+                $code = 201;
+            }
+        }*/
+        //return new Response($code, $code);
     }
 }

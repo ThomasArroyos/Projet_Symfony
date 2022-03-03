@@ -8,6 +8,7 @@
     <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 {% endblock %}
 
 {% block body %}
@@ -164,12 +165,50 @@
                 </button>
             </div>
         </div>
+        <div class="modal-container" id="modal_container_event_click">
+            <div class="container">
+                <div class="forms">
+                    <div class="form login">
+                        <span class="title">Modifier événement</span>
+                        <form action="#" id="form">
+                            <div class="input-field">
+                                <input type="text" placeholder="Titre événement" required id="modal_container_event_click_titre">
+                                <i class="uil uil-text-fields"></i>
+                            </div>
+                            <input type="hidden" required id="password">
+                            <div class="input-field">
+                                <select name="roles" id="roles">
+                                    <option value="" class="placeholder">Rôle</option>
+                                    <option value="ROLE_SECRETAIRE,ROLE_USER">Secretaire</option>
+                                    <option value="ROLE_INTERVENANT,ROLE_USER">Intervenant</option>
+                                    <option value="ROLE_ETUDIANT,ROLE_USER">Etudiant</option>
+                                </select>
+                                <i class="uil uil-shield"></i>
+                            </div>
+                            <div class="input-field" id="matieres">
+                                <input type="text" placeholder="Matières" required id="matiereValue" class="matieresV">
+                                <i class="uil uil-graduation-cap"></i>
+                                <i class="uil uil-plus-circle plus"></i>
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Enregistrer" id="enregistrer">
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Annuler" id="bouttonAnulerEdition">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/darkMode.js') }}"></script>
+    <script src="{{ asset('js/modalPlanning.js') }}"></script>
+    <script src="{{ asset('js/formatageHeure.js') }}"></script>
     <script>
         window.onload = function(){
 
@@ -206,18 +245,20 @@
                 headerToolbar: {
                     start: 'prev,next today',
                     center: 'title',
-                    end: 'dayGridMonth,timeGridWeek,monthGridYear'
+                    end: 'dayGridMonth,timeGridWeek'
                 },
                 events: {{ data|raw }},
-                editable: true,
                 eventResizableFromStart: true,
-                selectable: true
+                selectable: true,
+                selectOverlap: function(event) {
+                }
             });
-            calendar.render();
-            calendar.render();
 
             calendar.on('select', (e) => {
-                console.log("Oui")
+                console.log("calendar.on('select')")
+                console.log(e.startStr)
+                //fetch(`/api/test/${e.startStr}`).then(res => console.log(res)).catch()
+                //if (e)
                 lastStartTime = e.startStr
                 lastEndTime = e.endStr
                 lastAllDay = e.allDay
@@ -273,10 +314,13 @@
             })
 
             calendar.on('eventClick', (e) => {
-                lastEventClicked = e
-                titre.innerHTML = e.event.title
-                description.innerHTML = e.event.extendedProps.description
-                modal_container_event_selected.classList.add('show');
+                afficherModalContainerEventClick(e.event)
+                /*if (e.event.extendedProps.en_fond == "auto") {
+                    lastEventClicked = e
+                    titre.innerHTML = e.event.title
+                    description.innerHTML = e.event.extendedProps.description
+                    modal_container_event_selected.classList.add('show');
+                }*/
             })
 
             supprimer.addEventListener('click', (e) => {
@@ -321,7 +365,7 @@
             /*
              * Sert a formatter les heures
              */
-            function formaterHeure(HTMLScriptElement, start=true) {
+            /*function formaterHeure(HTMLScriptElement, start=true) {
                 console.log(HTMLScriptElement.event.end.toString())
                 let datetime_locale_format
                 if (start===true && HTMLScriptElement.event.start !== null) {
@@ -394,7 +438,7 @@
                     datetime_locale_format = ""
                 }
                 return datetime_locale_format
-            }
+            }*/
 
             /*
              * Modification d'événement

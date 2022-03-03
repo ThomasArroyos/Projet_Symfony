@@ -8,6 +8,7 @@ use App\Repository\CalendarRepository;
 use App\Repository\CouleurRepository;
 use App\Repository\EvenementRepository;
 use App\Repository\FormationRepository;
+use App\Repository\IntervenantRepository;
 use App\Repository\MatiereRepository;
 use App\Repository\UserRepository;
 use http\Env\Request;
@@ -18,8 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/planning', name: 'main')]
-    public function index(EvenementRepository $evenement,CouleurRepository $couleurRepository): Response
+    public function index(EvenementRepository $evenement,CouleurRepository $couleurRepository,IntervenantRepository $intervenantRepository): Response
     {
+        $test = $intervenantRepository->findBy(['id' => '3']);
+        dd($test[0]);
         $roles = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
         $email = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEmail();
 
@@ -33,11 +36,35 @@ class MainController extends AbstractController
 
         foreach($occurences as $occurence){
             $couleurs = $couleurRepository->findBy(['id' => $occurence->getMatiere()->getCouleur()->getId()]);
-            $rdvs[] = [
+            $options = [];
+            if($occurence->getRecurrent() == 1) {
+                $options = [
+                    'startRecur' => $occurence->getDateDebut()->format('Y-m-d H:i:s'),
+                    'endRecur' => $occurence->getDateFin()->format('Y-m-d H:i:s'),
+                    'startTime' => $occurence->getTempsDebutRecurrence()->format('H:i:s'),
+                    'endTime' => $occurence->getTempsFinRecurrence()->format('H:i:s'),
+                    'daysOfWeek' => $occurence->getJoursRecurrence()
+                ];
+            } else if ($occurence->getJourneeEntiere() == 0){
+                $options = [
+                    'end' => $occurence->getDateFin()->format('Y-m-d H:i:s')
+                ];
+            }
+
+            if ($occurence->getIntervenant() !== null) {
+                $options = array_merge($options,[
+                    'intervenant' => $occurence->getIntervenant()->getId()
+                    ]);
+            } else {
+                $options = array_merge($options,[
+                    'intervenant' => $occurence->getIntervenant()
+                ]);
+            }
+
+            $options = array_merge($options,[
                 'id' => $occurence->getId(),
                 'title' => $occurence->getTitre(),
-                'startRecur' => $occurence->getDateDebut()->format('Y-m-d H:i:s'),
-                'endRecur' => $occurence->getDateFin()->format('Y-m-d H:i:s'),
+                'start' => $occurence->getDateDebut()->format('Y-m-d H:i:s'),
                 'backgroundColor' => $couleurs[0]->getFond(),
                 'borderColor' => $couleurs[0]->getBordure(),
                 'textColor' => $couleurs[0]->getTexte(),
@@ -45,12 +72,13 @@ class MainController extends AbstractController
                 'editable' => $occurence->getModifiable(),
                 'overlap' => $occurence->getChevaucher(),
                 'display' => $occurence->getEnFond(),
-                'startTime' => $occurence->getTempsDebutRecurrence()->format('H:i:s'),
-                'endTime' => $occurence->getTempsFinRecurrence()->format('H:i:s'),
-                'daysOfWeek' => $occurence->getJoursRecurrence()
-            ];
+                'en_fond' => $occurence->getEnFond(),
+                'accepte' => $occurence->getAccepte(),
+                'matiere' => $occurence->getMatiere(),
+                'specialite' => $occurence->getSpecialite()
+            ]);
+            $rdvs[] = $options;
         }
-
         $data = json_encode($rdvs);
 
         return $this->render('main/index.html.twig', compact('data'));
