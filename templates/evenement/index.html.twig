@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Evenement index{% endblock %}
+
+{% block body %}
+    <h1>Evenement index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Date_debut</th>
+                <th>Date_fin</th>
+                <th>Journee_entiere</th>
+                <th>Chevauchable</th>
+                <th>Modifiable</th>
+                <th>Accepte</th>
+                <th>En_fond</th>
+                <th>Reccurent</th>
+                <th>Date_debut_recurrence</th>
+                <th>Date_fin_recurrence</th>
+                <th>Jours_recurrence</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for evenement in evenements %}
+            <tr>
+                <td>{{ evenement.id }}</td>
+                <td>{{ evenement.titre }}</td>
+                <td>{{ evenement.dateDebut ? evenement.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ evenement.dateFin ? evenement.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ evenement.journeeEntiere ? 'Yes' : 'No' }}</td>
+                <td>{{ evenement.chevauchable ? 'Yes' : 'No' }}</td>
+                <td>{{ evenement.modifiable ? 'Yes' : 'No' }}</td>
+                <td>{{ evenement.accepte ? 'Yes' : 'No' }}</td>
+                <td>{{ evenement.enFond }}</td>
+                <td>{{ evenement.reccurent ? 'Yes' : 'No' }}</td>
+                <td>{{ evenement.dateDebutRecurrence ? evenement.dateDebutRecurrence|date('H:i:s') : '' }}</td>
+                <td>{{ evenement.dateFinRecurrence ? evenement.dateFinRecurrence|date('H:i:s') : '' }}</td>
+                <td>{{ evenement.joursRecurrence }}</td>
+                <td>
+                    <a href="{{ path('evenement_show', {'id': evenement.id}) }}">show</a>
+                    <a href="{{ path('evenement_edit', {'id': evenement.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="14">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('evenement_new') }}">Create new</a>
+{% endblock %}

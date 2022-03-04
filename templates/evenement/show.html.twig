@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Evenement{% endblock %}
+
+{% block body %}
+    <h1>Evenement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ evenement.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ evenement.titre }}</td>
+            </tr>
+            <tr>
+                <th>Date_debut</th>
+                <td>{{ evenement.dateDebut ? evenement.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_fin</th>
+                <td>{{ evenement.dateFin ? evenement.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Journee_entiere</th>
+                <td>{{ evenement.journeeEntiere ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Chevauchable</th>
+                <td>{{ evenement.chevauchable ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Modifiable</th>
+                <td>{{ evenement.modifiable ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Accepte</th>
+                <td>{{ evenement.accepte ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>En_fond</th>
+                <td>{{ evenement.enFond }}</td>
+            </tr>
+            <tr>
+                <th>Reccurent</th>
+                <td>{{ evenement.reccurent ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Date_debut_recurrence</th>
+                <td>{{ evenement.dateDebutRecurrence ? evenement.dateDebutRecurrence|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_fin_recurrence</th>
+                <td>{{ evenement.dateFinRecurrence ? evenement.dateFinRecurrence|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Jours_recurrence</th>
+                <td>{{ evenement.joursRecurrence }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('evenement_index') }}">back to list</a>
+
+    <a href="{{ path('evenement_edit', {'id': evenement.id}) }}">edit</a>
+
+    {{ include('evenement/_delete_form.html.twig') }}
+{% endblock %}
