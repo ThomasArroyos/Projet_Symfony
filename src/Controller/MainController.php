@@ -36,6 +36,11 @@ class MainController extends AbstractController
             $route = 'intervenant/planning.html.twig';
         } else {
             $occurences = $eleveRepository->findOneBy(['id' => $user->getEleve()->getId()])->getFormation()->getEvenements()->getValues();
+            for ($i = 0;$i < sizeof($occurences); $i++){
+                if ($occurences[$i]->getAccepte() == false){
+                    unset($occurences[$i]);
+                }
+            }
             $route = 'eleve/planning.html.twig';
         }
 
