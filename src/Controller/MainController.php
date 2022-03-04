@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Formation;
 use App\Entity\Intervenant;
+use App\Entity\Matiere;
 use App\Repository\CalendarRepository;
 use App\Repository\CouleurRepository;
 use App\Repository\EleveRepository;
@@ -21,19 +22,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/planning', name: 'main')]
-    public function index(EvenementRepository $evenement,CouleurRepository $couleurRepository, IntervenantRepository $intervenantRepository, SpecialiteRepository $specialiteRepository, FormationRepository $formationRepository, EleveRepository $eleveRepository): Response
+    public function index(EvenementRepository $evenement,CouleurRepository $couleurRepository, IntervenantRepository $intervenantRepository, SpecialiteRepository $specialiteRepository, FormationRepository $formationRepository, EleveRepository $eleveRepository, MatiereRepository $matiereRepository): Response
     {
-        $roles = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
-        $email = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEmail();
+        $user = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser();
+        $roles = $user->getRoles();
+        $email = $user->getEmail();
 
         if ($roles[0] == 'ROLE_SECRETAIRE') {
             $occurences = $evenement->findAll();
             $route = 'secretaire/planning.html.twig';
         } else if ($roles[0] == 'ROLE_INTERVENANT') {
-            $occurences = $formationRepository->findOneBy(['id' => $specialiteRepository->findOneBy(['id' => $intervenantRepository->findBy(['id' => unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getIntervenant()->getId()])[0]->getMatiere()->getValues()[0]->getSpecialite()->getId()])->getFormation()->getId()])->getEvenements()->getValues();
+            $occurences = $formationRepository->findOneBy(['id' => $specialiteRepository->findOneBy(['id' => $intervenantRepository->findBy(['id' => $user->getIntervenant()->getId()])[0]->getMatiere()->getValues()[0]->getSpecialite()->getId()])->getFormation()->getId()])->getEvenements()->getValues();
             $route = 'intervenant/planning.html.twig';
         } else {
-            $occurences = $eleveRepository->findOneBy(['id' => unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEleve()->getId()])->getFormation()->getEvenements()->getValues();
+            $occurences = $eleveRepository->findOneBy(['id' => $user->getEleve()->getId()])->getFormation()->getEvenements()->getValues();
             $route = 'eleve/planning.html.twig';
         }
 
@@ -66,6 +68,12 @@ class MainController extends AbstractController
                 ]);
             }
 
+            if ($roles[0] !== 'ROLE_ETUDIANT') {
+                $options = array_merge($options, [
+                    'editable' => $occurence->getModifiable()
+                ]);
+            }
+
             $options = array_merge($options,[
                 'id' => $occurence->getId(),
                 'title' => $occurence->getTitre(),
@@ -74,7 +82,6 @@ class MainController extends AbstractController
                 'borderColor' => $couleurs[0]->getBordure(),
                 'textColor' => $couleurs[0]->getTexte(),
                 'allDay' => $occurence->getJourneeEntiere(),
-                'editable' => $occurence->getModifiable(),
                 'overlap' => $occurence->getChevauchable(),
                 'display' => $occurence->getEnFond(),
                 'en_fond' => $occurence->getEnFond(),

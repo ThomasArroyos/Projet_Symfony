@@ -399,4 +399,53 @@ class ApiController extends AbstractController
 
         return new Response('Evenement supprimer', 200);
     }
+
+    /**
+     * @Route ("/api/ajouter_evenement", name="api_ajouter_evement", methods={"PUT"})
+     */
+    public function apiAjouterEvenement(Request $request, EntityManagerInterface $entityManager)
+    {
+        $donnees = json_decode($request->getContent());
+
+        $evenement = new Evenement();
+
+        $evenement->setTitre($donnees->titre);
+        $evenement->setDateDebut(new \DateTime($donnees->date_debut));
+        $evenement->setDateFin(new \DateTime($donnees->date_fin));
+        $evenement->setJourneeEntiere($donnees->journee_entiere);
+        $evenement->setModifiable($donnees->modifiable);
+        $evenement->setChevauchable($donnees->chevauchable);
+        $evenement->setEnFond($donnees->en_fond);
+        $evenement->setAccepte($donnees->accepte);
+        $evenement->setReccurent($donnees->reccurent);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($evenement);
+        $em->flush();
+
+/*
+            $matiere->setNomMatiere($donnees->nomMatiere);
+            $matiere->setDureeTotale($donnees->dureeTotale);
+
+            if ($donnees->intervenantAffecte != "Personne") {
+                $em1 = $this->getDoctrine()->getManager();
+                $entrys = $em1->getRepository('App:User')->findBy(['email' => $donnees->intervenantAffecte]);
+                foreach ($entrys as $entry) {
+                    //$matiere->
+                }
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($matiere);
+            $em->flush();
+
+            //Retourner code
+            return new Response('Ok', 206);
+
+        } else {
+            //Données incomplètes
+            return new Response('Données incomplètes', 404);
+        }*/
+        return new Response('Evenement ajouter', 200);
+    }
 }

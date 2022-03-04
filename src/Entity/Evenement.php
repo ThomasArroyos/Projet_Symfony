@@ -258,6 +258,12 @@ class Evenement
         return $this;
     }
 
+    public function addMatiere(?Matiere $matiere): self
+    {
+        dd("test");
+        return $this;
+    }
+
     public function getIntervenant(): ?Intervenant
     {
         return $this->intervenant;

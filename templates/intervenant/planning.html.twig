@@ -6,6 +6,8 @@
     <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/css.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/registerForm.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/cssUtilisateurs.css') }}" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet' />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -165,6 +167,35 @@
                 </button>
             </div>
         </div>
+        <div class="modal-container" id="modal_container_calendar_click">
+            <div class="container">
+                <div class="forms">
+                    <div class="form login">
+                        <span class="title">Ajouter événement</span>
+                        <form action="#" id="form">
+                            <div class="input-field">
+                                <input type="text" placeholder="Titre événement" required id="modal_container_calendar_click_titre">
+                                <i class="uil uil-text-fields"></i>
+                            </div>
+                            <input type="hidden" required id="modal_container_calendar_click_start">
+                            <input type="hidden" required id="modal_container_calendar_click_end">
+                            <input type="hidden" required id="modal_container_calendar_click_allDay" value="0">
+                            <input type="hidden" required id="modal_container_calendar_click_overlap" value="1">
+                            <input type="hidden" required id="modal_container_calendar_click_editable" value="1">
+                            <input type="hidden" required id="modal_container_calendar_click_accepte" value="0">
+                            <input type="hidden" required id="modal_container_calendar_click_en_fond" value="auto">
+                            <input type="hidden" required id="modal_container_calendar_click_reccurent" value="0">
+                            <div class="input-field button">
+                                <input type="button" value="Enregistrer" id="modal_container_calendar_click_boutton_enregistrer">
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Annuler" id="modal_container_calendar_click_boutton_annuler">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal-container" id="modal_container_event_click">
             <div class="container">
                 <div class="forms">
@@ -207,7 +238,7 @@
 {% block javascripts %}
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/darkMode.js') }}"></script>
-    <script src="{{ asset('js/modalPlanningSecretaire.js') }}"></script>
+    <script src="{{ asset('js/modalPlanningIntervenant.js') }}"></script>
     <script src="{{ asset('js/formatageHeure.js') }}"></script>
     <script>
         window.onload = function(){
@@ -255,7 +286,8 @@
             });
 
             calendar.on('select', (e) => {
-                console.log("calendar.on('select')")
+                afficherModalContainerCalendarClick(e);
+                /*console.log("calendar.on('select')")
                 console.log(e.startStr)
                 //fetch(`/api/test/${e.startStr}`).then(res => console.log(res)).catch()
                 //if (e)
@@ -264,7 +296,7 @@
                 lastAllDay = e.allDay
                 document.querySelector("#start").value = lastStartTime.slice(0,16)
                 document.querySelector("#end").value = lastEndTime.slice(0,16)
-                modal_container_grid_selected.classList.add('show')
+                modal_container_grid_selected.classList.add('show')*/
             })
 
             ajouter.addEventListener('click', (e) => {
@@ -314,7 +346,7 @@
             })
 
             calendar.on('eventClick', (e) => {
-                afficherModalContainerEventClick(e.event)
+                //afficherModalContainerEventClick(e.event)
                 /*if (e.event.extendedProps.en_fond == "auto") {
                     lastEventClicked = e
                     titre.innerHTML = e.event.title
