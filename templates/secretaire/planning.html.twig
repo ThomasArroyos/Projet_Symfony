@@ -6,6 +6,8 @@
     <link href="{{ asset('css/cssPlanning.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/css.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/planning.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/registerForm.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/cssUtilisateurs.css') }}" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet' />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -165,36 +167,43 @@
                 </button>
             </div>
         </div>
-        <div class="modal-container" id="modal_container_event_click">
+        <div class="modal-container" id="modal_container_event_non_accepte_click">
             <div class="container">
                 <div class="forms">
                     <div class="form login">
-                        <span class="title">Modifier événement</span>
+                        <span class="title">Validation évenement</span>
                         <form action="#" id="form">
                             <div class="input-field">
-                                <input type="text" placeholder="Titre événement" required id="modal_container_event_click_titre">
-                                <i class="uil uil-text-fields"></i>
+                                <h2 id="modal_container_event_non_accepte_click_titre"></h2>
                             </div>
-                            <input type="hidden" required id="password">
+                            <div class="input-field button">
+                                <input type="button" value="Accepter" id="modal_container_event_non_accepte_click_boutton_accepter">
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Supprimer" id="modal_container_event_non_accepte_click_boutton_supprimer">
+                            </div>
+                            <div class="input-field button">
+                                <input type="button" value="Annuler" id="modal_container_event_non_accepte_click_boutton_annuler">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-container" id="modal_container_event_accepte_click">
+            <div class="container">
+                <div class="forms">
+                    <div class="form login">
+                        <span class="title">Supprimer évenement</span>
+                        <form action="#" id="form">
                             <div class="input-field">
-                                <select name="roles" id="roles">
-                                    <option value="" class="placeholder">Rôle</option>
-                                    <option value="ROLE_SECRETAIRE,ROLE_USER">Secretaire</option>
-                                    <option value="ROLE_INTERVENANT,ROLE_USER">Intervenant</option>
-                                    <option value="ROLE_ETUDIANT,ROLE_USER">Etudiant</option>
-                                </select>
-                                <i class="uil uil-shield"></i>
-                            </div>
-                            <div class="input-field" id="matieres">
-                                <input type="text" placeholder="Matières" required id="matiereValue" class="matieresV">
-                                <i class="uil uil-graduation-cap"></i>
-                                <i class="uil uil-plus-circle plus"></i>
+                                <h2 id="modal_container_event_accepte_click_titre"></h2>
                             </div>
                             <div class="input-field button">
-                                <input type="button" value="Enregistrer" id="enregistrer">
+                                <input type="button" value="Supprimer" id="modal_container_event_accepte_click_boutton_supprimer">
                             </div>
                             <div class="input-field button">
-                                <input type="button" value="Annuler" id="bouttonAnulerEdition">
+                                <input type="button" value="Annuler" id="modal_container_event_accepte_click_boutton_annuler">
                             </div>
                         </form>
                     </div>
@@ -255,16 +264,17 @@
             });
 
             calendar.on('select', (e) => {
-                console.log("calendar.on('select')")
-                console.log(e.startStr)
+                afficherModalContainerEventClick(e)
+                /*console.log("calendar.on('select')")
+                console.log(e.startStr)*/
                 //fetch(`/api/test/${e.startStr}`).then(res => console.log(res)).catch()
                 //if (e)
-                lastStartTime = e.startStr
+                /*lastStartTime = e.startStr
                 lastEndTime = e.endStr
                 lastAllDay = e.allDay
                 document.querySelector("#start").value = lastStartTime.slice(0,16)
                 document.querySelector("#end").value = lastEndTime.slice(0,16)
-                modal_container_grid_selected.classList.add('show')
+                modal_container_grid_selected.classList.add('show')*/
             })
 
             ajouter.addEventListener('click', (e) => {
@@ -314,7 +324,7 @@
             })
 
             calendar.on('eventClick', (e) => {
-                afficherModalContainerEventClick(e.event)
+                afficherModalContainerEventClick(e)
                 /*if (e.event.extendedProps.en_fond == "auto") {
                     lastEventClicked = e
                     titre.innerHTML = e.event.title

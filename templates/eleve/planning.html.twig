@@ -248,8 +248,9 @@
                     end: 'dayGridMonth,timeGridWeek'
                 },
                 events: {{ data|raw }},
-                eventResizableFromStart: true,
-                selectable: true,
+                eventResizableFromStart: false,
+                editable:false,
+                selectable: false,
                 selectOverlap: function(event) {
                 }
             });

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Calendar;
+use App\Entity\Evenement;
 use App\Entity\Matiere;
 use App\Entity\User;
 use App\Repository\EvenementRepository;
@@ -363,5 +364,39 @@ class ApiController extends AbstractController
             }
         }*/
         //return new Response($code, $code);
+    }
+
+    /**
+     * @Route ("/api/accepter_evenement/{id}", name="api_accepter_evement", methods={"PUT"})
+     */
+    public function apiAccepterEvenement(int $id, EvenementRepository $evenementRepository)
+    {
+        $occurences = $evenementRepository->findBy(['id' => $id]);
+
+        foreach ($occurences as $occurence) {
+            $occurence->setAccepte(1);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($occurence);
+            $em->flush();
+        }
+
+        return new Response('Evenement accepter', 200);
+    }
+
+    /**
+     * @Route ("/api/supprimer_evenement/{id}", name="api_supprimer_evement", methods={"PUT"})
+     */
+    public function apiSupprimerEvenement(int $id, EvenementRepository $evenementRepository)
+    {
+        $occurences = $evenementRepository->findBy(['id' => $id]);
+
+        foreach ($occurences as $occurence) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($occurence);
+            $em->flush();
+        }
+
+        return new Response('Evenement supprimer', 200);
     }
 }

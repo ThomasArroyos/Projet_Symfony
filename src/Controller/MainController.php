@@ -6,10 +6,12 @@ use App\Entity\Formation;
 use App\Entity\Intervenant;
 use App\Repository\CalendarRepository;
 use App\Repository\CouleurRepository;
+use App\Repository\EleveRepository;
 use App\Repository\EvenementRepository;
 use App\Repository\FormationRepository;
 use App\Repository\IntervenantRepository;
 use App\Repository\MatiereRepository;
+use App\Repository\SpecialiteRepository;
 use App\Repository\UserRepository;
 use http\Env\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,17 +21,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/planning', name: 'main')]
-    public function index(EvenementRepository $evenement,CouleurRepository $couleurRepository,IntervenantRepository $intervenantRepository): Response
+    public function index(EvenementRepository $evenement,CouleurRepository $couleurRepository, IntervenantRepository $intervenantRepository, SpecialiteRepository $specialiteRepository, FormationRepository $formationRepository, EleveRepository $eleveRepository): Response
     {
-        $test = $intervenantRepository->findBy(['id' => '3']);
-        dd($test[0]);
         $roles = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getRoles();
         $email = unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEmail();
 
         if ($roles[0] == 'ROLE_SECRETAIRE') {
             $occurences = $evenement->findAll();
+            $route = 'secretaire/planning.html.twig';
+        } else if ($roles[0] == 'ROLE_INTERVENANT') {
+            $occurences = $formationRepository->findOneBy(['id' => $specialiteRepository->findOneBy(['id' => $intervenantRepository->findBy(['id' => unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getIntervenant()->getId()])[0]->getMatiere()->getValues()[0]->getSpecialite()->getId()])->getFormation()->getId()])->getEvenements()->getValues();
+            $route = 'intervenant/planning.html.twig';
         } else {
-            $occurences = $evenement->findBy(['id_specialite' => '1']);
+            $occurences = $eleveRepository->findOneBy(['id' => unserialize($_SESSION['_sf2_attributes']['_security_main'])->getUser()->getEleve()->getId()])->getFormation()->getEvenements()->getValues();
+            $route = 'eleve/planning.html.twig';
         }
 
         $rdvs = [];
@@ -37,12 +42,12 @@ class MainController extends AbstractController
         foreach($occurences as $occurence){
             $couleurs = $couleurRepository->findBy(['id' => $occurence->getMatiere()->getCouleur()->getId()]);
             $options = [];
-            if($occurence->getRecurrent() == 1) {
+            if($occurence->getReccurent() == 1) {
                 $options = [
                     'startRecur' => $occurence->getDateDebut()->format('Y-m-d H:i:s'),
                     'endRecur' => $occurence->getDateFin()->format('Y-m-d H:i:s'),
-                    'startTime' => $occurence->getTempsDebutRecurrence()->format('H:i:s'),
-                    'endTime' => $occurence->getTempsFinRecurrence()->format('H:i:s'),
+                    'startTime' => $occurence->getDateDebutRecurrence()->format('H:i:s'),
+                    'endTime' => $occurence->getDateFinRecurrence()->format('H:i:s'),
                     'daysOfWeek' => $occurence->getJoursRecurrence()
                 ];
             } else if ($occurence->getJourneeEntiere() == 0){
@@ -70,7 +75,7 @@ class MainController extends AbstractController
                 'textColor' => $couleurs[0]->getTexte(),
                 'allDay' => $occurence->getJourneeEntiere(),
                 'editable' => $occurence->getModifiable(),
-                'overlap' => $occurence->getChevaucher(),
+                'overlap' => $occurence->getChevauchable(),
                 'display' => $occurence->getEnFond(),
                 'en_fond' => $occurence->getEnFond(),
                 'accepte' => $occurence->getAccepte(),
@@ -80,8 +85,9 @@ class MainController extends AbstractController
             $rdvs[] = $options;
         }
         $data = json_encode($rdvs);
+        $test = "data";
 
-        return $this->render('main/index.html.twig', compact('data'));
+        return $this->render($route, compact($test));
     }
 
     /**
